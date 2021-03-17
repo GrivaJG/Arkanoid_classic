@@ -60,7 +60,9 @@ int Levels::StartGame(RenderWindow& window)
     Menu::GetInstance().PlayerInit();                                   // Начало игры, устанавливаем жизни игрока, и количество очков в начальные значения.
    
     _level++;
-    
+    _level++;
+    _level++;
+    _level++;
     while (_level <= 4 && window.isOpen())
     {
         window.clear();
@@ -535,19 +537,10 @@ int Levels::InitLevel(int lvl)
             {
 
                 std::getline(file, stringOfFile);
-                
-                size_t iter = 0;
-                while (stringOfFile[iter] != ' ')
-                {
-                    pos << stringOfFile[iter];
-                    iter++;
-                }
-                                
-                pos << "\0";
+                std::stringstream ss(stringOfFile);
                
-                pos >> startPositionLeft;
+                ss >> startPositionLeft;
                 
-
                 for (size_t i = 0; i < stringOfFile.length(); i++)
                 {
                     if (stringOfFile[i] == 'B' && stringOfFile[i + 1] == 'Y' && stringOfFile[i + 2] == 'E')

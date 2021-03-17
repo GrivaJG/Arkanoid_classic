@@ -1,9 +1,9 @@
 ﻿  Levels.cpp
-C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\Menu.h(8,32): warning C4081: требуется "newline"; обнаружен ";"
-C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\Levels.cpp(108,20): warning C4244: инициализация: преобразование "sf::Int64" в "float", возможна потеря данных
-C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\Levels.cpp(112,29): warning C4244: инициализация: преобразование "sf::Int32" в "float", возможна потеря данных
-C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\Levels.cpp(113,32): warning C4244: инициализация: преобразование "sf::Int32" в "float", возможна потеря данных
-C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\Levels.cpp(160,49): warning C4804: >: небезопасное использование типа "bool" в операции
-C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\Levels.cpp(669,94): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\Levels.cpp(669,44): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-  Arkanoid_classic.vcxproj -> C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\x64\Debug\Arkanoid_classic.exe
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Menu.h(8,32): warning C4081: требуется "newline"; обнаружен ";"
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Levels.cpp(110,20): warning C4244: инициализация: преобразование "sf::Int64" в "float", возможна потеря данных
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Levels.cpp(114,29): warning C4244: инициализация: преобразование "sf::Int32" в "float", возможна потеря данных
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Levels.cpp(115,32): warning C4244: инициализация: преобразование "sf::Int32" в "float", возможна потеря данных
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Levels.cpp(162,55): warning C4804: >: небезопасное использование типа "bool" в операции
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Levels.cpp(662,94): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Levels.cpp(662,44): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+  Arkanoid_classic.vcxproj -> F:\My_project\С++\Arkanoid\Arkanoid_classic\x64\Debug\Arkanoid_classic.exe
