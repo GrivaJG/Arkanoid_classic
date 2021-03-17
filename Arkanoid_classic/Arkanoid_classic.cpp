@@ -18,6 +18,7 @@ int main()
     Music music;
     music.openFromFile(MUSIC_BASE);
     music.setLoop(true);
+    music.setVolume(30);
     music.play();
 
     

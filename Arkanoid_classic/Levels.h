@@ -60,13 +60,8 @@ private:
     // Создание уровней
     void GameInit();
     int InitLevel(int lvl);
-    int CreateLevel1();
-    int CreateLevel2();
-    int CreateLevel3();
-    int CreateLevel4();
-    int CreateLevel5();
-    int CreateLevel6();
-    int CreateLevel7();
+    int BlockSetPosition(int startPositionTop, int startPostitionLeft, int positionX, int positionY);
+
     int StartLevel(RenderWindow& window);
 
     

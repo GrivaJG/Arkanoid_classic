@@ -1,4 +1,4 @@
-C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\x64\Debug\Arkanoid_classic.exe
-C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\x64\Debug\Arkanoid_classic.pdb
 F:\My_project\С++\Arkanoid\Arkanoid_classic\x64\Debug\Arkanoid_classic.exe
 F:\My_project\С++\Arkanoid\Arkanoid_classic\x64\Debug\Arkanoid_classic.pdb
+C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\x64\Debug\Arkanoid_classic.exe
+C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\x64\Debug\Arkanoid_classic.pdb
