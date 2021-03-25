@@ -151,6 +151,7 @@
     <ClCompile Include="Bonus.cpp" />
     <ClCompile Include="Border.cpp" />
     <ClCompile Include="Bullets.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Levels.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -163,7 +164,9 @@
     <ClInclude Include="Bonus.h" />
     <ClInclude Include="Border.h" />
     <ClInclude Include="Bullets.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Event.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Levels.h" />
     <ClInclude Include="Menu.h" />

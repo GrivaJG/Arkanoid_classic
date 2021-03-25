@@ -59,10 +59,7 @@ int Levels::StartGame(RenderWindow& window)
     Menu::GetInstance().CreateStartMenu(window);                        // —оздаем стартовый экран
     Menu::GetInstance().PlayerInit();                                   // Ќачало игры, устанавливаем жизни игрока, и количество очков в начальные значени€.
    
-    _level++;
-    _level++;
-    _level++;
-    _level++;
+    _level++;    
     while (_level <= 4 && window.isOpen())
     {
         window.clear();

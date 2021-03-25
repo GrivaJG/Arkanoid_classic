@@ -3,9 +3,7 @@
 #include "Config.h" 
 #include "Menu.h"
 #include "Levels.h"
-
-
-
+#include "Event.h"
 
 int main()
 {
@@ -21,7 +19,6 @@ int main()
     music.setVolume(30);
     music.play();
 
-    
     
     Menu::GetInstance();
     
