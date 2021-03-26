@@ -4,47 +4,42 @@
 #include "Platform.h"
 #include "Ball.h"
 #include "Block.h"
+#include "Bonus.h"
+#include "MusicAndSounds.h"
 #include "CollisionManager.h"
 
 
 
 
 
-void CollisionManager::CollisionDetecter(list<Ball*>& balls, list<Block*>& blocks, list<Bullets*> bullets, ConcretePlatform& platform)
+void CollisionManager::CollisionDetecter()
 {
 
 }
 
 
-void CollisionManager::BallCollision(list<Ball*>& balls)
+void CollisionManager::BallCollision()
 {
     list<Ball*>::iterator bl;
 
-    for (bl = balls.begin(); bl != balls.end();)
+    for (bl = m_balls.begin(); bl != m_balls.end();)
     {
-        // Проверяем пересечение шарика с левой стенкой карты
-        if ((*_bl)->GetRect().left < BORDER_LEFT)
+        // Intersection with left wall
+        if ((*bl)->GetRect().left < BORDER_LEFT)
         {
-            (*_bl)->setPosition(BORDER_LEFT, (*_bl)->getPosition().y);  // Если вдруг перелетели правую стенку, то уснатавливаемся в самое крайнее возможное положение
-            (*_bl)->SetAngleUnitCircle(Vector2f(-(*_bl)->GetAngleUnitCircle().x, (*_bl)->GetAngleUnitCircle().y)); // Меняем направление на противоположное по х
-            MusicAndSounds::GetInstance().BallBounceOfBorderMapPlay();
+            CollisionBallWithLeftWall(**bl);
         }
 
-        // Проверяем пересечение с правой стенкой
-        if ((*_bl)->GetRect().left + (*_bl)->GetRect().width > BORDER_RIGHT)
+        // Intersection with right wall
+        if ((*bl)->GetRect().left + (*bl)->GetRect().width > BORDER_RIGHT)
         {
-            // Если вдруг перелетели правую стенку, то уснатавливаемся в самое крайнее возможное положение
-            (*_bl)->setPosition(BORDER_RIGHT - (*_bl)->GetRect().width, (*_bl)->getPosition().y);
-            (*_bl)->SetAngleUnitCircle(Vector2f(-(*_bl)->GetAngleUnitCircle().x, (*_bl)->GetAngleUnitCircle().y)); // Меняем направление на противоположное по х
-            MusicAndSounds::GetInstance().BallBounceOfBorderMapPlay();
+            CollisionBallWithRightWall(**bl);
         }
 
-        // Проверяем пересечение с потолком
-        if ((*_bl)->getPosition().y < BORDER_TOP)
+        // Intersection with top
+        if ((*bl)->getPosition().y < BORDER_TOP)
         {
-            (*_bl)->setPosition((*_bl)->getPosition().x, BORDER_TOP); // Если вдруг перелетели потолок, то устанавливаемся в саоме крайнее возможное положение
-            (*_bl)->SetAngleUnitCircle(Vector2f((*_bl)->GetAngleUnitCircle().x, -(*_bl)->GetAngleUnitCircle().y)); // Меняем направление на противоположное по х
-            MusicAndSounds::GetInstance().BallBounceOfBorderMapPlay();
+            CollisionBallWithTop(**bl);
         }
 
 

@@ -8,26 +8,39 @@ using std::list;
 class CollisionManager
 {
 public:
-    TEvent<> m_Collision_Ball_With_Left_Wall;
-    TEvent<> m_Collision_Ball_With_Right_Wall;
-    TEvent<> m_Collision_Ball_With_Top;
-    TEvent<> m_Collision_Ball_With_Platform;
-    TEvent<> m_Collision_Ball_Wtih_Block;
-    TEvent<> m_Collision_Ball_Is_Fall;
+    CollisionManager(ConcretePlatform* platform, std::list<Ball*>& ball, std::list<Block*>& block, std::list<Bonus*>& bonus,
+        std::list<Bullets*>& bullets) : m_platform(platform), m_ball(ball), m_block(block), m_bonus(bonus), m_bullets(bullets) {}
+    ~CollisionManager() {}
 
-    TEvent<> m_Collision_Platform_With_Bonus;
-
-    TEvent<> m_Collision_Bullets_With_Top;
-    TEvent<> m_Collision_Bullets_With_Block;
-
-    void CollisionDetecter(list<Ball*>& balls, list<Block*>& blocks, list<Bullets*> bullets, ConcretePlatform& platform);
+    void CollisionDetecter();
 
 private:
 
-    void BallCollision(list<Ball*>& balls);
+    ConcretePlatform* m_platform;    
+    std::list<Ball*>& m_balls;
+    std::list<Block*>& m_blocks;
+    std::list<Bonus*>& m_bonuses;
+    std::list<Bullets*>& m_bullets;
+
+    void BallCollision();
     void PlatformCollision();
     void BulletsCollision();
 
+    //Events
+    TEvent<Ball&> CollisionBallWithLeftWall;
+    TEvent<Ball&> CollisionBallWithRightWall;
+    TEvent<Ball&> CollisionBallWithTop;
+    TEvent<Ball&> CollisionBallWithBottom;
+
+    TEvent<Ball&, ConcretePlatform*> CollisionBallWithPlatform;
+
+    TEvent<Ball&, Block&> CollisionBallWithBlock;
+
+    TEvent<ConcretePlatform*, Bonus&> CollisionPlatformWithBonus;
+
+    TEvent<Bullets&> CollisionBulletsWithTop;
+    TEvent<Bullets&, Block&> CollisionBulletsWithTop;
+    
 };
 
 

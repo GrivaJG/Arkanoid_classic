@@ -30,10 +30,10 @@ public:
 	//Методы
 	void Move(double angleUnitCircleX, double angleUnityCircleY, float time);
 
-	void SetSpeedFast();  // Тестовые функции
-	void SetSpeedSlow();  // Тестовые функции
+	void SetSpeedFast();  
+	void SetSpeedSlow();  
 	
-	void ResetSpeed(); // Функция ускорения, нужна будет когда буду делать бонусы
+	void ResetSpeed(); 
 	float GetSpeed() { return _acceleration; }
 
 
@@ -59,7 +59,10 @@ public:
 	
 	static unsigned GetBallCount() { return _ballCounter; }
 
-	void BonusCatch();
+	void CollisionWithLeftWall();
+	void CollisionWithRightWall();
+	void CollisionWithTop();
+	
 
 
 

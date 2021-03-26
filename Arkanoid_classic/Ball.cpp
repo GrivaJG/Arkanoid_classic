@@ -1,5 +1,6 @@
 
 
+#include "MusicAndSounds.h"
 #include "Ball.h"
 #include "Menu.h"
 
@@ -68,5 +69,28 @@ void Ball::SetSpeedSlow()
 void Ball::ResetSpeed()
 {
     _acceleration = 0.3;
+}
+
+
+
+void Ball::CollisionWithLeftWall()
+{
+    this->setPosition(BORDER_LEFT, this->getPosition().y);                                            // if intersect left wall  
+    this->SetAngleUnitCircle(Vector2f(-this->GetAngleUnitCircle().x, this->GetAngleUnitCircle().y));  // change direction move
+    MusicAndSounds::GetInstance().BallBounceOfBorderMapPlay();
+}
+
+void Ball::CollisionWithRightWall()
+{    
+    this->setPosition(BORDER_RIGHT - this->GetRect().width, this->getPosition().y);                  // if intersect Right wall
+    this->SetAngleUnitCircle(Vector2f(-this->GetAngleUnitCircle().x, this->GetAngleUnitCircle().y)); // change direction move
+    MusicAndSounds::GetInstance().BallBounceOfBorderMapPlay();
+}
+
+void Ball::CollisionWithTop()
+{
+    this->setPosition(this->getPosition().x, BORDER_TOP);                                                 // if intersect Top
+    this->SetAngleUnitCircle(Vector2f(this->GetAngleUnitCircle().x, -this->GetAngleUnitCircle().y));      // change direction move
+    MusicAndSounds::GetInstance().BallBounceOfBorderMapPlay();
 }
 
