@@ -5,9 +5,9 @@
 #include "Platform.h"
 
 
-#pragma warning(disable : 4996); //ругаетс€ на устаревшую строку text.setColor(Color::Yellow)
+#pragma warning(disable : 4996); // Disable warning for text.setColor(Color::Yellow)
 
-class Menu //наивный одиночка
+class Menu // Simple Singleton
 {
 private:
 	Menu();
@@ -20,7 +20,7 @@ private:
 	unsigned _combo = 1;
 
 
-	//–азличные текста
+	// Texts and Fonts
 	Font _font;
 
 	Text _textStartGame;
@@ -35,7 +35,7 @@ public:
 	Menu(Menu& otner) = delete;
 	void operator=(const Menu&) = delete;
 
-	static Menu& GetInstance() //статическа€ функци€ инициализатор
+	static Menu& GetInstance() // Static initialization function
 	{
 		static Menu menu_;
 		return menu_;

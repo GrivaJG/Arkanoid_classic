@@ -153,6 +153,7 @@
     <ClCompile Include="Bullets.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="EventHandler.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Levels.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventHandler.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Levels.h" />
     <ClInclude Include="Menu.h" />

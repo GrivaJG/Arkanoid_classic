@@ -27,8 +27,8 @@ public:
 	//Ìועמהû
 	FloatRect GetRect();
 
-	
 
+	Image& GetImage() { return _image; }	
 	Texture GetTexture() { return _texture; }
 	void SetTexture() { _texture.loadFromImage(_image); }
 };

@@ -76,21 +76,18 @@ void Ball::ResetSpeed()
 void Ball::CollisionWithLeftWall()
 {
     this->setPosition(BORDER_LEFT, this->getPosition().y);                                            // if intersect left wall  
-    this->SetAngleUnitCircle(Vector2f(-this->GetAngleUnitCircle().x, this->GetAngleUnitCircle().y));  // change direction move
-    MusicAndSounds::GetInstance().BallBounceOfBorderMapPlay();
+    this->SetAngleUnitCircle(Vector2f(-this->GetAngleUnitCircle().x, this->GetAngleUnitCircle().y));  // change direction move    
 }
 
 void Ball::CollisionWithRightWall()
 {    
     this->setPosition(BORDER_RIGHT - this->GetRect().width, this->getPosition().y);                  // if intersect Right wall
-    this->SetAngleUnitCircle(Vector2f(-this->GetAngleUnitCircle().x, this->GetAngleUnitCircle().y)); // change direction move
-    MusicAndSounds::GetInstance().BallBounceOfBorderMapPlay();
+    this->SetAngleUnitCircle(Vector2f(-this->GetAngleUnitCircle().x, this->GetAngleUnitCircle().y)); // change direction move   
 }
 
 void Ball::CollisionWithTop()
 {
     this->setPosition(this->getPosition().x, BORDER_TOP);                                                 // if intersect Top
-    this->SetAngleUnitCircle(Vector2f(this->GetAngleUnitCircle().x, -this->GetAngleUnitCircle().y));      // change direction move
-    MusicAndSounds::GetInstance().BallBounceOfBorderMapPlay();
+    this->SetAngleUnitCircle(Vector2f(this->GetAngleUnitCircle().x, -this->GetAngleUnitCircle().y));      // change direction move    
 }
 

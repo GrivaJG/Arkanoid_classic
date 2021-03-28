@@ -14,13 +14,18 @@
 
 void CollisionManager::CollisionDetecter()
 {
+    BallCollision();     // All Collision with balls
 
+    PlatformCollision(); // All Collision with platform
+
+    BulletsCollision();  // Bullets collision with blocks and top
 }
 
 
 void CollisionManager::BallCollision()
 {
     list<Ball*>::iterator bl;
+    list<Block*>::iterator blk;
 
     for (bl = m_balls.begin(); bl != m_balls.end();)
     {
@@ -43,74 +48,48 @@ void CollisionManager::BallCollision()
         }
 
 
-        //----------------------------------------------------------------Проверяем столкновение шарика с платформой, (обрабатываем в классе Platform)
-        if (_platform->GetInstance()->GetRect().intersects((*_bl)->GetRect()))
+        //---------------------------------------------------------------Collision balls with platform
+        if (m_platform->GetInstance()->GetRect().intersects((*bl)->GetRect()))
         {
-            Menu::GetInstance().ResetCombo();
-
-
-            if ((*_bl)->GetFlagCatch() && Ball::GetBallCount() == 1)
-            {
-                if (!(*_bl)->GetFlagBallCatchPosition())
-                {
-                    MusicAndSounds::GetInstance().BallCatchPlay();
-
-                    (*_bl)->SetCatchPositionX((*_bl)->getPosition().x - _platform->GetInstance()->GetRect().left);
-                    (*_bl)->SetFlagBallCatchPosition(true);
-                    (*_bl)->DecreaseCatchCounter();
-                }
-
-                (*_bl)->setPosition(_platform->GetInstance()->GetRect().left + (*_bl)->GetCatchPositionX(), _platform->GetInstance()->GetRect().top - BLUE_BALL_HEIGHT + 1);
-            }
-            else
-            {
-                MusicAndSounds::GetInstance().BallBounceOfPlatformPlay();
-                (*_bl)->SetAngleUnitCircle(_platform->GetInstance()->CollisionWithBall(**_bl));
-
-                if ((*_bl)->GetCatchCounter() > 0)
-                {
-                    (*_bl)->SetFlagCatch(true);
-                }
-            }
-
-
+            CollisionBallWithPlatform(**bl, m_platform);
         }
 
-        //----------------------------------------------------------------Проверяем столкновение шарика с блоками, (обрабатываем в блкоах)
+        //----------------------------------------------------------------Collision ball with blocks
 
-        for (_blk = _block.begin(); _blk != _block.end();)
+        for (blk = m_blocks.begin(); blk != m_blocks.end();)
         {
-            if ((*_blk)->GetRect().intersects((*_bl)->GetRect()))
+            if ((*blk)->GetRect().intersects((*bl)->GetRect()))
             {
-                Menu::GetInstance().SetCountScore(10 * Menu::GetInstance().GetCombo());
-                Menu::GetInstance().IncreaseCombo();
-
-                MusicAndSounds::GetInstance().BallBounceOfBlockPlay();
-
-                (*_bl)->SetAngleUnitCircle((*_blk)->BallCollision(**_bl));
-                if ((*_blk)->GetFlagBonus())
-                {
-                    _bonus.push_back(new Bonus(_image, (*_blk)->GetBlockType(), Vector2f((*_blk)->GetRect().left + (*_blk)->GetRect().width / 2 - BONUS_WIDTH / 2,
-                        (*_blk)->getPosition().y)));
-                }
-                delete* _blk;
-                _blk = _block.erase(_blk);
+                CollisionBallWithBlock(**bl, **blk, m_bonuses);
+                delete* blk;
+                blk = m_blocks.erase(blk);
             }
             else
             {
-                _blk++;
+                blk++;
             }
         }
 
 
-        // Если шарик упал 
-        if ((*_bl)->getPosition().y > BORDER_BOTTOM)
+        //--------------------------------------------------------------------If ball fallen
+        if ((*bl)->getPosition().y > BORDER_BOTTOM)
         {
-            BallFall();
+            if (Ball::GetBallCount() <= 1)
+            {
+                CollisionBallWithBottom(**bl, m_platform);
+                bl++;
+            }
+            else
+            {
+                delete* bl;
+                bl = m_balls.erase(bl);
+                MusicAndSounds::GetInstance().BallBounceOfBorderMapPlay();
+            }
         }
         else
         {
-            _bl++;
+            bl++;
         }
     }
 }
+
