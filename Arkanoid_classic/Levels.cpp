@@ -1,10 +1,20 @@
 
-#include "Levels.h"
-#include "MusicAndSounds.h"
-#include <fstream>
 #include <iostream>
 #include <cstdlib>
+#include <fstream>
 
+#include "Config.h"
+#include "Border.h"
+#include "Block.h"
+#include "Ball.h"
+#include "Bonus.h"
+#include "Bullets.h"
+#include "Platform.h"
+
+#include "MusicAndSounds.h"
+
+
+#include "Levels.h"
 
 unsigned Ball::_ballCounter = 0;
 
