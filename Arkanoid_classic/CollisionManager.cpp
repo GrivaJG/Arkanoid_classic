@@ -93,3 +93,77 @@ void CollisionManager::BallCollision()
     }
 }
 
+
+
+void CollisionManager::PlatformCollision()
+{
+
+    //-------------------------------------------------------------------Intersect Platform with bonus
+    
+    
+    list<Bonus*>::iterator bns;
+
+    for (bns = m_bonuses.begin(); bns != m_bonuses.end();)
+    {
+        if ((*bns)->GetRect().intersects(m_platform->GetInstance()->GetRect()))
+        {
+            CollisionPlatformWithBonus(m_platform, **bns, m_balls);
+            delete* bns;
+            bns = m_bonuses.erase(bns);
+        }
+        else if ((*bns)->getPosition().y > BORDER_BOTTOM) // If bonus intersect bottom then delete bonus
+        {
+            delete* bns;
+            bns = m_bonuses.erase(bns);
+
+        }
+        else
+        {
+            bns++;
+        }
+
+    }
+}
+
+//-------------------------------------------------------------------Intersect Bullets with top and with blocks
+void CollisionManager::BulletsCollision()
+{
+    std::list<Bullets*>::iterator blts;
+    std::list<Block*>::iterator blk;
+
+    for (blts = m_bullets.begin(); blts != m_bullets.end();)
+    {
+        if ((*blts)->getPosition().y < BORDER_TOP)
+        {
+            CollisionBulletsWithTop(**blts);
+            delete* blts;
+            blts = m_bullets.erase(blts);
+            continue;
+        }
+
+
+        for (blk = m_blocks.begin(); blk != m_blocks.end();)
+        {
+            if ((*blts)->GetRect().intersects((*blk)->GetRect()))
+            {
+                CollisionBulletsWithBlock(**blts, **blk, m_bonuses);
+                delete* blk;
+                blk = m_blocks.erase(blk);
+
+                delete* blts;
+                blts = m_bullets.erase(blts);
+                break;
+            }
+            else
+            {
+                blk++;
+            }
+        }
+
+        if (!m_bullets.empty() && blts != m_bullets.end())
+        {
+            blts++;
+        }
+
+    }
+}

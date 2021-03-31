@@ -4,6 +4,8 @@
 #include "Block.h"
 #include "Platform.h"
 #include "Bonus.h"
+#include "Bullets.h"
+#include "Game.h"
 #include "MusicAndSounds.h"
 #include "EventHandler.h"
 
@@ -72,11 +74,10 @@ void EventHandler::CollisionBallWithBlock(Ball& ball, Block& block, std::list<Bo
 
 void EventHandler::CollisionBallWithBottom(Ball& ball, ConcretePlatform* platform)
 {
-    _flagBallMove = false; // запускаем процессы в самой игре
+    Game::GetInstance().SetFlagBallMove(false);
     ball.SetFlagInit(true);
     ball.ResetCatch();
-    ball.ResetSpeed();
-    
+    ball.ResetSpeed();    
 
     Menu::GetInstance().SetCountlives(-1);
     MusicAndSounds::GetInstance().BallFallPlay();
@@ -85,3 +86,23 @@ void EventHandler::CollisionBallWithBottom(Ball& ball, ConcretePlatform* platfor
     platform->ChangePlatform(mediumPlatform);
 }
 
+void EventHandler::CollisionPlatformWithBonus(ConcretePlatform* platform, Bonus& bonus, std::list<Ball*>& balls)
+{
+    MusicAndSounds::GetInstance().PlatformCollBonusPlay();
+    bonus.CollisionWithPlatform(platform, balls);   
+}
+
+void EventHandler::CollisionBulletsWithTop(Bullets& bullet)
+{
+    MusicAndSounds::GetInstance().BulletsHitBorderMapPlay();
+}
+
+void EventHandler::CollisionBulletsWithBlock(Bullets& bullet, Block& block, std::list<Bonus*> bonuses)
+{
+    MusicAndSounds::GetInstance().BulletsHitBlockPlay();
+    if (block.GetFlagBonus())
+    {
+        bonuses.push_back(new Bonus(block.GetImage(), block.GetBlockType(), Vector2f(block.GetRect().left + block.GetRect().width / 2 - BONUS_WIDTH / 2,
+            block.getPosition().y)));
+    }
+}

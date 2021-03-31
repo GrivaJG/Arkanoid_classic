@@ -5,7 +5,6 @@
 
 class Game // Simple Singleton
 {
-
 public:
 	Game(Game& otner) = delete;
 	void operator=(const Game&) = delete;
@@ -16,40 +15,40 @@ public:
 		return game_;
 	}
 
+    bool GetFlagBallMove() { return _flagBallMove; }            //is the ball in motion?
+    void SetFlagBallMove(bool flag) { _flagBallMove = flag; }
+
+    void StartGame();
+
 private:
-    Game() { m_image.loadFromFile(IMGPATH); }
+    Game();
 
     Image m_image;
 
+    Border _board;
+    ConcretePlatform* _platform;
+
+
     unsigned _level;                // Current level number 
 
-    //Border screen
-    Border _board;
+    std::list<class Block*> _block;
 
-    // Game Objects
-    std::list<Block*> _block;
-    std::list<Bonus*> _bonus;
-    std::list<Bullets*> _bullets;
-    std::list<Ball*> _ball;
-    ConcretePlatform* _platform;
-        
-    bool _flagBallMove;				 // Active when Ball in Move
 
-    void GameInit();                 // Initialization all game objects
-    int InitLevel(int lvl);          // Create level
+    std::list<class Bonus*> _bonus;
 
-    int BlockSetPosition(int startPositionTop, int startPostitionLeft, int positionX, int positionY); // ?????
 
-    int StartGame(RenderWindow& window);
+    std::list<class Ball*> _ball;
+    bool _flagBallMove;				
 
 
 
-
-
-
-
-
-
+    std::list<class Bullets*> _bullets;
 
 };
+
+
+
+
+
+
 

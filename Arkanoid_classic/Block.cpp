@@ -324,5 +324,3 @@ Vector2f Block::BallCollisionRightWall(Ball& ball)
     
     return angleUnitCircle;
 }
-
-

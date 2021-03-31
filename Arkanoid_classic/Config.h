@@ -7,6 +7,7 @@
 #include <list>
 #include <random>				//Для задания случайного направления полета шарика при первом его запуске с платформы
 #include <sstream>
+#include <cassert>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>

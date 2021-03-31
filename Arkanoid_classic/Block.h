@@ -35,10 +35,7 @@ public:
 	Vector2f BallCollision(Ball& ball);
 
 	BlockType GetBlockType() { return _blockType; }
-	bool GetFlagBonus() { return _flagBonus; }
-
-	
-	
+	bool GetFlagBonus() { return _flagBonus; }	
 
 };
 

@@ -23,7 +23,7 @@ class Levels
 
 
 public:
-    Levels(Image& img);
+    Levels();
     ~Levels();
 
     int StartGame(RenderWindow& window);
