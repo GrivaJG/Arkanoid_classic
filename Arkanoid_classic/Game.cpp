@@ -12,10 +12,11 @@
 
 unsigned Ball::_ballCounter = 0;
 
-Game::Game() : _flagBallMove(false), _level(0)
+Game::Game() : m_flag_ball_move(false), m_level(0)
 {
     m_image.loadFromFile(IMGPATH);
     
+    GameObjectInit();   //Game object initialization
 }
 
 
@@ -25,79 +26,34 @@ void Game::StartGame()
     window.setVerticalSyncEnabled(0);
 
     MusicAndSounds::GetInstance().BaseMusicPlay();
-}
 
-//---------------------------------------------------------------------Инициализация стартовых значений игры
-
-void Levels::GameInit()
-{
-    _platform->ChangePlatform(mediumPlatform);
-    _platform->GetInstance()->ReSetBullets();
-    _platform->GetInstance()->setPosition(PLATFORM_START_POSITION);
-
-
-    _flagBallMove = false;
-
-    while (!_ball.empty())
-    {
-        _bl = _ball.begin();
-        delete* _bl;
-        _bl = _ball.erase(_bl);
-    }
-
-    while (!_block.empty())
-    {
-        _blk = _block.begin();
-        delete* _blk;
-        _blk = _block.erase(_blk);
-    }
-
-    while (!_bonus.empty())
-    {
-        _bns = _bonus.begin();
-        delete* _bns;
-        _bns = _bonus.erase(_bns);
-    }
-
-    _ball.push_back(new Ball(_image));
-    _bl = _ball.begin();
-    (*_bl)->setPosition(BALL_START_POSITION);
-}
-
-
-
-int Levels::StartLevel(RenderWindow& window)
-{
-    // Инициализация случайного числа при помощи Вихря Мерсенна, нужен для того, чтобы при запуске шарика с платформы
-    // Он полетел по случайной траектории
+    // Random number for the zadaniya sluchainogo vectora dvigeniya
     std::random_device rd;
     std::mt19937 mersenne(rd());
 
-    double angleUnitCircleX = 0;         // Переменные в которых будет храниться направление движения шарика (вектор на единичной окружности)
+    double angleUnitCircleX = 0;         // Variables v kotorih budet hranitsya vector dlya sluchainogo poleta sharika pri pervom zapuske
     double angleUnitCircleY = 0;
 
-    // Инициализируем переменную которая будет отдавать время и перезагружать его
+    
     Clock clock;
-
-    Clock clockForBullets;
-    Clock clockForBallSpeed;
-    _flagBallMove = false;
+    Clock clock_for_bullets;
+    Clock clock_for_ball_speed;
 
     while (window.isOpen())
     {
-        // Блок обновления временной единицы 
+        // Blok obnovleniya vremennoi edinici
         float time = clock.getElapsedTime().asMicroseconds();
         clock.restart();
         time = time / 1000;
 
-        float timeForBullet = clockForBullets.getElapsedTime().asMilliseconds();  // Заводим таймер для выпуска пуль      
-        float timeForBallSpeed = clockForBallSpeed.getElapsedTime().asMilliseconds(); // Заводим таймер для ускорения шарика
+        float timeForBullet    = clock_for_bullets.getElapsedTime().asMilliseconds();  // zavodim timer dlya vipuska bullets      
+        float timeForBallSpeed = clock_for_ball_speed.getElapsedTime().asMilliseconds();  // zavodim timer dlya uskoreniya sharika
 
-        //---------------------------------------------Обработка событий нажатия кнопок
+        //---------------------------------------------Obrabotka sobitii nagatiya klavish
         Event event;
         while (window.pollEvent(event))
         {
-            // Выключаем игру если нажата клавиша Esc или крестик в правом верхнем углу
+            // Esli nagat krestik v verhnem uglu ecrana or 
             if (event.type == Event::Closed ||
                 Keyboard::isKeyPressed(Keyboard::Escape))
             {
@@ -280,6 +236,55 @@ int Levels::StartLevel(RenderWindow& window)
 
     return 0;
 }
+
+}
+
+//---------------------------------------------------------------------Initialization default values of the game objects
+
+void Game::GameObjectInit()
+{
+    m_platform->ChangePlatform(mediumPlatform);
+    m_platform->GetInstance()->ReSetBullets();
+    m_platform->GetInstance()->setPosition(PLATFORM_START_POSITION);
+
+    m_flag_ball_move = false;
+
+    std::list<Ball*>::iterator bl;
+
+    while (!m_balls.empty())
+    {
+        bl = m_balls.begin();
+        delete* bl;
+        bl = m_balls.erase(bl);
+    }
+
+    std::list<Block*>::iterator blk;
+
+    while (!m_blocks.empty())
+    {
+        blk = m_blocks.begin();
+        delete* blk;
+        blk = m_blocks.erase(blk);
+    }
+
+    std::list<Bonus*>::iterator bns;
+    while (!m_bonuses.empty())
+    {
+        bns = m_bonuses.begin();
+        delete* bns;
+        bns = m_bonuses.erase(bns);
+    }
+
+    m_balls.push_back(new Ball(m_image));
+    bl = m_balls.begin();
+    (*bl)->setPosition(BALL_START_POSITION);
+}
+
+
+
+void Game::GameLoop(RenderWindow& window)
+{
+   
 
 
 

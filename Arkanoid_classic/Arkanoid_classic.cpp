@@ -3,7 +3,7 @@
 
 int main()
 {
-    Game::GetInstance().
+    Game::GetInstance().StartGame();
     return 0;
 }
 

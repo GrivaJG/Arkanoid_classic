@@ -15,34 +15,35 @@ public:
 		return game_;
 	}
 
-    bool GetFlagBallMove() { return _flagBallMove; }            //is the ball in motion?
-    void SetFlagBallMove(bool flag) { _flagBallMove = flag; }
+    bool GetFlagBallMove() { return m_flag_ball_move; }            //is the ball in motion?
+    void SetFlagBallMove(bool flag) { m_flag_ball_move = flag; }
 
     void StartGame();
+
+   
 
 private:
     Game();
 
     Image m_image;
 
-    Border _board;
-    ConcretePlatform* _platform;
+    Border m_board;                  // Border Map
+    ConcretePlatform* m_platform;   
 
+    std::list<class Block*> m_blocks;
+    std::list<class Bonus*> m_bonuses;
+    std::list<class Ball*> m_balls;
+    std::list<class Bullets*> m_bullets;
 
-    unsigned _level;                // Current level number 
-
-    std::list<class Block*> _block;
-
-
-    std::list<class Bonus*> _bonus;
-
-
-    std::list<class Ball*> _ball;
-    bool _flagBallMove;				
+    unsigned m_level;                // Current level number 
+    bool m_flag_ball_move;
 
 
 
-    std::list<class Bullets*> _bullets;
+    
+
+    void GameLoop(RenderWindow& window);                    //Base game logic
+    void GameObjectInit();
 
 };
 
