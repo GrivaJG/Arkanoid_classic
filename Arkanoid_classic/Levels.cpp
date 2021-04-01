@@ -1,53 +1,12 @@
 
-#include "Levels.h"
-#include "MusicAndSounds.h"
 #include <fstream>
-#include <iostream>
 #include <cstdlib>
 
+#include "Config.h"
+#include "Block.h"
+#include "Levels.h"
 
-
-
-Levels::Levels(Image& img) : _image(img)
-{
-    
-    _platform = new ConcretePlatform(_image);
-    _platform->GetInstance()->setPosition(PLATFORM_START_POSITION);
-
-    _ball.push_back(new Ball(_image));
-    _bl = _ball.begin();
-    (*_bl)->setPosition(BALL_START_POSITION);
-
-    _level = 0;    
-    _flagBallMove = false;
-
-    MusicAndSounds::GetInstance();
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-//----------------------------------------------------------------Создание уровней
-
-int Levels::InitLevel(int lvl)
+void Levels::InitLevel(int lvl, std::list<Block*>& blocks)
 {
     std::ifstream file("Config/lvlCreator.ini");
     if (file.is_open())
@@ -92,92 +51,92 @@ int Levels::InitLevel(int lvl)
                 {
                     if (stringOfFile[i] == 'B' && stringOfFile[i + 1] == 'Y' && stringOfFile[i + 2] == 'E')
                     {
-                        _block.push_back(new Block(_image, YELLOW, true));
-                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY);
+                        blocks.push_back(new Block(m_image, YELLOW, true));
+                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY, blocks);
                         i += 3;
                     }
 
                     else if (stringOfFile[i] == 'B' && stringOfFile[i + 1] == 'G' && stringOfFile[i + 2] == 'R')
                     {
-                        _block.push_back(new Block(_image, GREEN, true));
-                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY);
+                        blocks.push_back(new Block(m_image, GREEN, true));
+                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY, blocks);
                         i += 3;
                     }
 
                     else if (stringOfFile[i] == 'B' && stringOfFile[i + 1] == 'P' && stringOfFile[i + 2] == 'I')
                     {
-                        _block.push_back(new Block(_image, PINK, true));
-                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY);
+                        blocks.push_back(new Block(m_image, PINK, true));
+                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY, blocks);
                         i += 3;
                     }
 
                     else if (stringOfFile[i] == 'B' && stringOfFile[i + 1] == 'P' && stringOfFile[i + 2] == 'U')
                     {
-                        _block.push_back(new Block(_image, PURPLE, true));
-                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY);
+                        blocks.push_back(new Block(m_image, PURPLE, true));
+                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY, blocks);
                         i += 3;
                     }
 
                     else if (stringOfFile[i] == 'B' && stringOfFile[i + 1] == 'R' && stringOfFile[i + 2] == 'E')
                     {
-                        _block.push_back(new Block(_image, RED, true));
-                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY);
+                        blocks.push_back(new Block(m_image, RED, true));
+                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY, blocks);
                         i += 3;
                     }
 
                     else if (stringOfFile[i] == 'B' && stringOfFile[i + 1] == 'B' && stringOfFile[i + 2] == 'L')
                     {
-                        _block.push_back(new Block(_image, BLUE, true));
-                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY);
+                        blocks.push_back(new Block(m_image, BLUE, true));
+                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY, blocks);
                         i += 3;
                     }
 
                     else if (stringOfFile[i] == 'Y' && stringOfFile[i + 1] == 'E')
                     {
-                        _block.push_back(new Block(_image, YELLOW));
-                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY);
+                        blocks.push_back(new Block(m_image, YELLOW));
+                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY, blocks);
                         i += 2;
                     }
 
                     else if (stringOfFile[i] == 'G' && stringOfFile[i + 1] == 'R')
                     {
-                        _block.push_back(new Block(_image, GREEN));
-                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY);
+                        blocks.push_back(new Block(m_image, GREEN));
+                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY, blocks);
                         i += 2;
                     }
 
                     else if (stringOfFile[i] == 'P' && stringOfFile[i + 1] == 'I')
                     {
-                        _block.push_back(new Block(_image, PINK));
-                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY);
+                        blocks.push_back(new Block(m_image, PINK));
+                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY, blocks);
                         i += 2;
                     }
 
                     else if (stringOfFile[i] == 'P' && stringOfFile[i + 1] == 'U')
                     {
-                        _block.push_back(new Block(_image, PURPLE));
-                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY);
+                        blocks.push_back(new Block(m_image, PURPLE));
+                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY, blocks);
                         i += 2;
                     }
 
                     else if (stringOfFile[i] == 'R' && stringOfFile[i + 1] == 'E')
                     {
-                        _block.push_back(new Block(_image, RED));
-                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY);
+                        blocks.push_back(new Block(m_image, RED));
+                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY, blocks);
                         i += 2;
                     }
 
                     else if (stringOfFile[i] == 'B' && stringOfFile[i + 1] == 'L')
                     {
-                        _block.push_back(new Block(_image, BLUE));
-                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY);
+                        blocks.push_back(new Block(m_image, BLUE));
+                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY, blocks);
                         i += 2;
                     }
 
                     else if (stringOfFile[i] == 'O' && stringOfFile[i + 1] == 'R')
                     {
-                        _block.push_back(new Block(_image, ORANGE));
-                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY);
+                        blocks.push_back(new Block(m_image, ORANGE));
+                        positionX = BlockSetPosition(startPositionTop, startPositionLeft, positionX, positionY, blocks);
                         i += 2;                        
                     }
 
@@ -187,26 +146,21 @@ int Levels::InitLevel(int lvl)
                         i += 2;
                     }
                    
-                }
-                
+                }                
                 positionX = 0;
-                positionY++;
-                
+                positionY++;                
             }
-        }
-            
+        }            
     }
-    
-
-    file.close();
-    return 0;
+    file.close();    
 }
 
-int Levels::BlockSetPosition(int startPositionTop, int startPositionLeft, int positionX, int positionY)
+int Levels::BlockSetPosition(int startPositionTop, int startPositionLeft, int positionX, int positionY, std::list<Block*>& blocks)
 {
-    _blk = _block.end();
-    _blk--;
-    (*_blk)->setPosition(startPositionLeft + positionX * (BLOCK_WIDTH + 1), startPositionTop + positionY * (BLOCK_HEIGHT + 1));
+    std::list<Block*>::iterator blk;
+    blk = blocks.end();
+    blk--;
+    (*blk)->setPosition(startPositionLeft + positionX * (BLOCK_WIDTH + 1), startPositionTop + positionY * (BLOCK_HEIGHT + 1));
     positionX++;
     return positionX;
 }

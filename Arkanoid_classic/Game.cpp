@@ -1,24 +1,22 @@
 
-#include "Config.h"
-#include "Border.h"
-#include "Block.h"
-#include "Ball.h"
-#include "Bonus.h"
-#include "Platform.h"
-#include "Bullets.h"
-#include "MusicAndSounds.h"
+
+
 #include "Game.h"
+
+
 
 
 unsigned Ball::_ballCounter = 0;
 
-Game::Game() : m_flag_ball_move(false), m_level(0)
+Game::Game() : m_levels(m_image), m_flag_ball_move(false), m_level(0)
 {
     m_image.loadFromFile(IMGPATH);
     
-    GameObjectInit();   //Game object initialization
-}
+    m_platform = new ConcretePlatform(m_image);
+    m_collision_manager = new CollisionManager(m_platform, m_balls, m_blocks, m_bonuses, m_bullets);
 
+    GameObjectInit();   //Game object initialization    
+}
 
 void Game::StartGame()
 {
@@ -27,17 +25,48 @@ void Game::StartGame()
 
     MusicAndSounds::GetInstance().BaseMusicPlay();
 
-    // Random number for the zadaniya sluchainogo vectora dvigeniya
+    Menu::GetInstance().CreateStartMenu(window);                        // Startoviy ecran pered zapuskom igrvogo processa
+    
+
+    m_level++;
+    while (m_level <= 4 && window.isOpen())                             //Kostil
+    {
+        window.clear();
+        Menu::GetInstance().PlayerInit();                               // Pered nachalom igri ustanavlivaem ochki i gizni v startovie znacheniya
+        GameObjectInit();                                               // Privodim vse igrovie elementi v startovoe pologenie
+        Menu::GetInstance().CreateLevelSplashScreen(window, m_board, m_level);
+        m_levels.InitLevel(m_level, m_blocks);
+        if (GameLoop(window) > 0)
+        {
+            Menu::GetInstance().SetScoreRecord();
+            Menu::GetInstance().CreateStopGame(window, m_blocks, m_board, m_platform);
+            m_level = 0;            
+        }
+        m_level++;                                                       
+    }
+
+    Menu::GetInstance().CreateEndGame(window, m_blocks, m_board, m_platform);
+}
+
+
+int Game::GameLoop(RenderWindow& window)
+{  
+    // Random number for zadaniya sluchainogo vectora dvigeniya sharika
     std::random_device rd;
     std::mt19937 mersenne(rd());
 
-    double angleUnitCircleX = 0;         // Variables v kotorih budet hranitsya vector dlya sluchainogo poleta sharika pri pervom zapuske
-    double angleUnitCircleY = 0;
+    double angle_unit_circleX = 0;         // Variables v kotorih budet hranitsya vector dlya sluchainogo poleta sharika pri pervom zapuske
+    double angle_unit_circleY = 0;
 
     
     Clock clock;
     Clock clock_for_bullets;
     Clock clock_for_ball_speed;
+
+    std::list<Block*>::iterator blk;
+    std::list<Bonus*>::iterator bns;
+    std::list<Ball*>::iterator bl;
+    std::list<Bullets*>::iterator blts;    
 
     while (window.isOpen())
     {
@@ -46,44 +75,41 @@ void Game::StartGame()
         clock.restart();
         time = time / 1000;
 
-        float timeForBullet    = clock_for_bullets.getElapsedTime().asMilliseconds();  // zavodim timer dlya vipuska bullets      
-        float timeForBallSpeed = clock_for_ball_speed.getElapsedTime().asMilliseconds();  // zavodim timer dlya uskoreniya sharika
+        float time_for_bullet    = clock_for_bullets.getElapsedTime().asMilliseconds();  // zavodim timer dlya vipuska bullets      
+        float time_for_ball_speed = clock_for_ball_speed.getElapsedTime().asMilliseconds();  // zavodim timer dlya uskoreniya sharika
 
         //---------------------------------------------Obrabotka sobitii nagatiya klavish
         Event event;
         while (window.pollEvent(event))
-        {
-            // Esli nagat krestik v verhnem uglu ecrana or 
+        {            
             if (event.type == Event::Closed ||
                 Keyboard::isKeyPressed(Keyboard::Escape))
             {
                 window.close();
-            }
-
-
-            // –еализуем событие однократного нажати€ клавиши пробел
+            }           
             if (Keyboard::isKeyPressed(Keyboard::Space))
             {
-                // «десь отдадим команду начала игры через булеву переменную _flagBallMove;
-                if (!_flagBallMove)
+                // start game procees if m_flag_ball_move = false and key presed space;
+                if (!m_flag_ball_move)
                 {
-                    // ‘ормируем начальное направление движени€ шарика при помощи единичной окружности
-                    angleUnitCircleX = (mersenne() % 150);
-                    angleUnitCircleX = (angleUnitCircleX - 75) / 100;
-                    angleUnitCircleY = sqrt(1.0 - pow(angleUnitCircleX, 2));
-                    angleUnitCircleY = -1 * abs(angleUnitCircleY);
+                    // Formiruem nachalnoe napravlenie dvigeniya sharika pri pomoschi edinichnoi okrugnostyi
+                    angle_unit_circleX = (mersenne() % 150);
+                    angle_unit_circleX = (angle_unit_circleX - 75) / 100;
+                    angle_unit_circleY = sqrt(1.0 - pow(angle_unit_circleX, 2));
+                    angle_unit_circleY = -1 * abs(angle_unit_circleY);
 
-                    // Ќе заходим в этот блок до следующей инициализации
-                    _flagBallMove = true;
+                    // Ne zahodim v etot blok do sleduuschei initializacii
+                    m_flag_ball_move = true;
                 }
 
-                // ≈сли мы поймали бонус прилипани€ к платформе, то отлипаем от нее здесь
-                for (_bl = _ball.begin(); _bl != _ball.end(); _bl++)
+                std::list<Ball*>::iterator bl;
+                // Esli poimali bonus prilipaniya to otlipaem on nee zdes
+                for (bl = m_balls.begin(); bl != m_balls.end(); bl++)
                 {
-                    if ((*_bl)->getPosition().y == _platform->GetInstance()->GetRect().top - BLUE_BALL_HEIGHT + 1)
+                    if ((*bl)->getPosition().y == m_platform->GetInstance()->GetRect().top - BLUE_BALL_HEIGHT + 1)
                     {
-                        (*_bl)->SetFlagCatch(false);
-                        (*_bl)->SetFlagBallCatchPosition(false);
+                        (*bl)->SetFlagCatch(false);
+                        (*bl)->SetFlagBallCatchPosition(false);
                     }
                 }
 
@@ -91,153 +117,146 @@ void Game::StartGame()
         }
 
 
-        //-------------------------------------------—оздание дополнительных элементов
+        //-------------------------------------------Create additional elements
 
-        // ≈сли выбран бонус создани€ пуль, создаем пули
-        if (_platform->GetInstance()->GetBullets() > 0)
+        // Esli poluchen bonus sozdaniya bullets to sozdaem bullets
+        if (m_platform->GetInstance()->GetBullets() > 0)
         {
-            if (timeForBullet > 1000)
+            if (time_for_bullet > 1000)
             {
-                _platform->GetInstance()->Fire();
+                m_platform->GetInstance()->Fire();
 
                 MusicAndSounds::GetInstance().PlatformFirePlay();
 
-                clockForBullets.restart();
+                clock_for_bullets.restart();
 
-                Bullets* tempBullet1 = new Bullets(_image);
-                Bullets* tempBullet2 = new Bullets(_image);
+                Bullets* temp_bullet1 = new Bullets(m_image);
+                Bullets* temp_bullet2 = new Bullets(m_image);
 
-                tempBullet1->setPosition(_platform->GetInstance()->GetRect().left, _platform->GetInstance()->GetRect().top +
-                    _platform->GetInstance()->GetRect().height / 2 - BULLET_HEIGHT / 2);
+                temp_bullet1->setPosition(m_platform->GetInstance()->GetRect().left, m_platform->GetInstance()->GetRect().top +
+                    m_platform->GetInstance()->GetRect().height / 2 - BULLET_HEIGHT / 2);
 
-                tempBullet2->setPosition(_platform->GetInstance()->GetRect().left + _platform->GetInstance()->GetRect().width - BULLET_WIDTH,
-                    _platform->GetInstance()->GetRect().top + _platform->GetInstance()->GetRect().height / 2 - BULLET_HEIGHT / 2);
+                temp_bullet2->setPosition(m_platform->GetInstance()->GetRect().left + m_platform->GetInstance()->GetRect().width - BULLET_WIDTH,
+                    m_platform->GetInstance()->GetRect().top + m_platform->GetInstance()->GetRect().height / 2 - BULLET_HEIGHT / 2);
 
-
-                _bullets.push_back(tempBullet1);
-                _bullets.push_back(tempBullet2);
+                m_bullets.push_back(temp_bullet1);
+                m_bullets.push_back(temp_bullet2);
 
             }
         }
 
 
-        //-------------------------------------------------ƒвижение элементов
+        //-------------------------------------------------Moving elements
 
-        // ƒвижение платформы
+        // Moving Platform
         if (Keyboard::isKeyPressed(Keyboard::Left))
         {
-            // ƒвигаемс€ влево, пока координата х не станет меньше 25,
-            // Ёто граница передвижени€, если пересекли то устанавливаем позицию в последнее возможное положение
-            _platform->GetInstance()->Move(-0.5, time);
-            if (_platform->GetInstance()->GetRect().left < BORDER_LEFT)
+            // Dvigaemsya vlevo poka koordinata x ne stanet menshe BORDER_LEFT            
+            m_platform->GetInstance()->Move(-0.5, time);
+            if (m_platform->GetInstance()->GetRect().left < BORDER_LEFT)
             {
-                _platform->GetInstance()->setPosition(Vector2f(BORDER_LEFT, PLATFORM_START_POSITION.y));
+                m_platform->GetInstance()->setPosition(Vector2f(BORDER_LEFT, PLATFORM_START_POSITION.y));
             }
         }
         if (Keyboard::isKeyPressed(Keyboard::Right))
         {
-            // ƒвигаемс€ влево, пока координата х не станет меньше 25,
-            // Ёто граница передвижени€, если пересекли то устанавливаем позицию в последнее возможное положение
-            _platform->GetInstance()->Move(0.5, time);
-            if (_platform->GetInstance()->GetRect().left + _platform->GetInstance()->GetRect().width > BORDER_RIGHT)
+            // Dvigaemsya vlevo poka koordinata x ne stanet bolshe BORDER_RIGHT             
+            m_platform->GetInstance()->Move(0.5, time);
+            if (m_platform->GetInstance()->GetRect().left + m_platform->GetInstance()->GetRect().width > BORDER_RIGHT)
             {
-                _platform->GetInstance()->setPosition(Vector2f(BORDER_RIGHT - _platform->GetInstance()->GetRect().width, PLATFORM_START_POSITION.y));
+                m_platform->GetInstance()->setPosition(Vector2f(BORDER_RIGHT - m_platform->GetInstance()->GetRect().width, PLATFORM_START_POSITION.y));
             }
         }
 
-
-        // ≈сли игра началась запускаем движение шарика
-        if (_flagBallMove)
+        // zapuskaem dvigenie sharika
+        if (m_flag_ball_move)
         {
-            for (_bl = _ball.begin(); _bl != _ball.end(); _bl++)
-                (*_bl)->Move(angleUnitCircleX, angleUnitCircleY, time);
+            for (bl = m_balls.begin(); bl != m_balls.end(); bl++)
+                (*bl)->Move(angle_unit_circleX, angle_unit_circleY, time);
         }
-        // ≈сли игра не началась шарик прив€зан к платформе
+        // Esli igra ne nachalas - sharik privyazan k platforme
         else
         {
-            // ѕервое условие: "х" шарика всегда по середине платформы
-            for (_bl = _ball.begin(); _bl != _ball.end(); _bl++)
+            // First condition: "х" sharika vsegda privyazan k seredine platformi
+            for (bl = m_balls.begin(); bl != m_balls.end(); bl++)
             {
-                (*_bl)->setPosition((_platform->GetInstance()->GetRect().left +
-                    (_platform->GetInstance()->GetRect().width / 2) - ((*_bl)->GetRect().width / 2)),
-                    // ¬торое условие: "y" шарика всегда выше платформы на высоту шарика
-                    _platform->GetInstance()->GetRect().top - (*_bl)->GetRect().height);
-            }
-
-        }
-
-        // ƒвигаем бонусы
-        for (_bns = _bonus.begin(); _bns != _bonus.end(); _bns++)
-        {
-            (*_bns)->Move(time);
-        }
-
-        // ƒвигаем пули
-        for (_blts = _bullets.begin(); _blts != _bullets.end(); _blts++)
-        {
-            (*_blts)->Move(time);
-        }
-
-
-        // --------------------------------------------------------------------ѕосле всех перемещений провер€ем столкновени€
-        CollisionDetecter();
-
-
-        // --------------------------------------------------------------------≈сли подошло врем€ усложн€ем игру ускор€€ шарик
-
-        if (timeForBallSpeed > 10000)
-        {
-            clockForBallSpeed.restart();
-            for (_bl = _ball.begin(); _bl != _ball.end(); _bl++)
-            {
-                (*_bl)->SetSpeedFast();
+                (*bl)->setPosition((m_platform->GetInstance()->GetRect().left +
+                    (m_platform->GetInstance()->GetRect().width / 2) - ((*bl)->GetRect().width / 2)),
+                    // Second condition: "y" sharika vsegda vishe platformi
+                    m_platform->GetInstance()->GetRect().top - (*bl)->GetRect().height);
             }
         }
 
-        // -------------------------------------------≈сли жизни закончились выводим экран окончани€ игры, все переменные приводим к начальному значению
+        // Moving bonus
+        std::list<Bonus*>::iterator bns;
+        for (bns = m_bonuses.begin(); bns != m_bonuses.end(); bns++)
+        {
+            (*bns)->Move(time);
+        }
+
+        // Moving bullets
+        std::list<Bullets*>::iterator blts;
+        for (blts = m_bullets.begin(); blts != m_bullets.end(); blts++)
+        {
+            (*blts)->Move(time);
+        }
+
+        // --------------------------------------------------------------------Posle vseh peremesheniy proveryaem stolknoveniya
+        m_collision_manager->CollisionDetecter();
+
+
+        // --------------------------------------------------------------------Uskoryaem sharik cherez vremennie intervali (kostil)
+
+        if (time_for_ball_speed > 10000)
+        {
+            clock_for_ball_speed.restart();
+            for (bl = m_balls.begin(); bl != m_balls.end(); bl++)
+            {
+                (*bl)->SetSpeedFast();
+            }
+        }
+
+        // -------------------------------------------Proveryaem kolichestvo gizney i esly oni zakonchilis - zakanchivaem igru
         if (Menu::GetInstance().GetCountlives() <= 0)
         {
-            return -1;
+            return 1;
         }
 
-        if (_block.empty())
+        if (m_blocks.empty())
         {
-            return 0;
+            return 2;
         }
 
         window.clear();
 
-        _board.CreateMap(window);
-        _board.CreateMenu(window);
+        m_board.CreateMap(window);
+        m_board.CreateMenu(window);
 
-        Menu::GetInstance().CreateMenu(window, _level);
+        Menu::GetInstance().CreateMenu(window, m_level);
 
-        for (_blk = _block.begin(); _blk != _block.end(); _blk++)
-            window.draw(**_blk);
+        for (blk = m_blocks.begin(); blk != m_blocks.end(); blk++)
+            window.draw(**blk);
 
-        for (_bns = _bonus.begin(); _bns != _bonus.end(); _bns++)
-            window.draw(**_bns);
+        for (bns = m_bonuses.begin(); bns != m_bonuses.end(); bns++)
+            window.draw(**bns);
 
-        for (_bl = _ball.begin(); _bl != _ball.end(); _bl++)
-            window.draw(**_bl);
+        for (bl = m_balls.begin(); bl != m_balls.end(); bl++)
+            window.draw(**bl);
 
-        for (_blts = _bullets.begin(); _blts != _bullets.end(); _blts++)
+        for (blts = m_bullets.begin(); blts != m_bullets.end(); blts++)
         {
-            window.draw(**_blts);
+            window.draw(**blts);
         }
 
-        window.draw(*_platform->GetInstance());
+        window.draw(*m_platform->GetInstance());
 
         window.display();
-
-
     }
-
 
     return 0;
 }
 
-}
+
 
 //---------------------------------------------------------------------Initialization default values of the game objects
 
@@ -282,66 +301,46 @@ void Game::GameObjectInit()
 
 
 
-void Game::GameLoop(RenderWindow& window)
+
+
+
+
+
+
+Game::~Game()
 {
-   
+    delete m_platform;
 
+    std::list<Block*>::iterator blk;
+    std::list<Bonus*>::iterator bns;
+    std::list<Ball*>::iterator bl;
+    std::list<Bullets*>::iterator blts;
 
-
-
-int Levels::StartGame(RenderWindow& window)
-{
-
-    Menu::GetInstance().CreateStartMenu(window);                        // —оздаем стартовый экран
-    Menu::GetInstance().PlayerInit();                                   // Ќачало игры, устанавливаем жизни игрока, и количество очков в начальные значени€.
-
-    _level++;
-    while (_level <= 4 && window.isOpen())
+    while (!m_blocks.empty())
     {
-        window.clear();
-        GameInit();                                                     // ѕриводим все элементы в стартовой полжожение                                                                        
-        Menu::GetInstance().CreateLevelSplashScreen(window, _board, _level);
-        InitLevel(_level);
-        if (StartLevel(window) < 0)
-        {
-            Menu::GetInstance().SetScoreRecord();
-            Menu::GetInstance().CreateStopGame(window, _block, _board, _platform);
-            _level = 0;
-            return 0;
-        }
-        _level++;                                                       // ”величиваем уровень на 1
+        blk = m_blocks.begin();
+        delete* blk;
+        blk = m_blocks.erase(blk);
     }
 
-    Menu::GetInstance().CreateEndGame(window, _block, _board, _platform);
-    return 0;
-
-
-
-}
-
-
-Levels::~Levels()
-{
-    delete _platform;
-
-    while (!_block.empty())
+    while (!m_bonuses.empty())
     {
-        _blk = _block.begin();
-        delete* _blk;
-        _blk = _block.erase(_blk);
+        bns = m_bonuses.begin();
+        delete* bns;
+        bns = m_bonuses.erase(bns);
     }
 
-    while (!_bonus.empty())
+    while (!m_balls.empty())
     {
-        _bns = _bonus.begin();
-        delete* _bns;
-        _bns = _bonus.erase(_bns);
+        bl = m_balls.begin();
+        delete* bl;
+        bl = m_balls.erase(bl);
     }
 
-    while (!_ball.empty())
+    while (!m_bullets.empty())
     {
-        _bl = _ball.begin();
-        delete* _bl;
-        _bl = _ball.erase(_bl);
+        blts = m_bullets.begin();
+        delete* blts;
+        blts = m_bullets.erase(blts);
     }
 }

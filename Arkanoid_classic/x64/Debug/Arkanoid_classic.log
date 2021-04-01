@@ -1,1 +1,7 @@
-﻿  Arkanoid_classic.vcxproj -> C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\x64\Debug\Arkanoid_classic.exe
+﻿  Game.cpp
+C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\Menu.h(8,32): warning C4081: требуется "newline"; обнаружен ";"
+C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\Game.cpp(74,20): warning C4244: инициализация: преобразование "sf::Int64" в "float", возможна потеря данных
+C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\Game.cpp(78,34): warning C4244: инициализация: преобразование "sf::Int32" в "float", возможна потеря данных
+C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\Game.cpp(79,35): warning C4244: инициализация: преобразование "sf::Int32" в "float", возможна потеря данных
+C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\Game.cpp(123,50): warning C4804: >: небезопасное использование типа "bool" в операции
+  Arkanoid_classic.vcxproj -> C:\Users\griva\Source\Repos\Arkanoid\Arkanoid_classic\x64\Debug\Arkanoid_classic.exe

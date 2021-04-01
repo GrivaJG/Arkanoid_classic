@@ -1,14 +1,36 @@
 
-#include "Event.h"
-#include "Bullets.h"
-#include "Platform.h"
-#include "Ball.h"
-#include "Block.h"
-#include "Bonus.h"
-#include "MusicAndSounds.h"
+
+
 #include "CollisionManager.h"
 
+CollisionManager::CollisionManager(ConcretePlatform* platform, std::list<Ball*>& ball, std::list<Block*>& block, std::list<Bonus*>& bonus,
+    std::list<Bullets*>& bullets) : m_platform(platform), m_balls(ball), m_blocks(block), m_bonuses(bonus), m_bullets(bullets)
+{
+    //Podpisivaemsya na sobitiya
+    CollisionBallWithLeftWall += METHOD_HANDLER(event_handler, EventHandler::CollisionBallWithLeftWall);
+    CollisionBallWithRightWall += METHOD_HANDLER(event_handler, EventHandler::CollisionBallWithRightWall);
+    CollisionBallWithTop += METHOD_HANDLER(event_handler, EventHandler::CollisionBallWithTop);
+    CollisionBallWithBottom += METHOD_HANDLER(event_handler, EventHandler::CollisionBallWithBottom);
+    CollisionBallWithBlock += METHOD_HANDLER(event_handler, EventHandler::CollisionBallWithBlock);
+    CollisionBallWithPlatform += METHOD_HANDLER(event_handler, EventHandler::CollisionBallWithPlatform);
+    CollisionPlatformWithBonus += METHOD_HANDLER(event_handler, EventHandler::CollisionPlatformWithBonus);
+    CollisionBulletsWithTop += METHOD_HANDLER(event_handler, EventHandler::CollisionBulletsWithTop);
+    CollisionBulletsWithBlock += METHOD_HANDLER(event_handler, EventHandler::CollisionBulletsWithBlock);
+}
 
+CollisionManager::~CollisionManager()
+{
+    // Otpisivaemsya ot sobitiy
+    CollisionBallWithLeftWall -= METHOD_HANDLER(event_handler, EventHandler::CollisionBallWithLeftWall);
+    CollisionBallWithRightWall -= METHOD_HANDLER(event_handler, EventHandler::CollisionBallWithRightWall);
+    CollisionBallWithTop -= METHOD_HANDLER(event_handler, EventHandler::CollisionBallWithTop);
+    CollisionBallWithBottom -= METHOD_HANDLER(event_handler, EventHandler::CollisionBallWithBottom);
+    CollisionBallWithBlock -= METHOD_HANDLER(event_handler, EventHandler::CollisionBallWithBlock);
+    CollisionBallWithPlatform -= METHOD_HANDLER(event_handler, EventHandler::CollisionBallWithPlatform);
+    CollisionPlatformWithBonus -= METHOD_HANDLER(event_handler, EventHandler::CollisionPlatformWithBonus);
+    CollisionBulletsWithTop -= METHOD_HANDLER(event_handler, EventHandler::CollisionBulletsWithTop);
+    CollisionBulletsWithBlock -= METHOD_HANDLER(event_handler, EventHandler::CollisionBulletsWithBlock);
+}
 
 
 

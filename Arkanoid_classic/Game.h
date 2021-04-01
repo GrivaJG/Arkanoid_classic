@@ -1,6 +1,17 @@
-#pragma once
 
+#ifndef GAME_H_
+#define GAME_H_
 
+#include "Config.h"
+#include "Border.h"
+#include "Block.h"
+#include "Ball.h"
+#include "Bonus.h"
+#include "Platform.h"
+#include "Bullets.h"
+#include "MusicAndSounds.h"
+#include "CollisionManager.h"
+#include "Levels.h"
 
 
 class Game // Simple Singleton
@@ -15,19 +26,18 @@ public:
 		return game_;
 	}
 
-    bool GetFlagBallMove() { return m_flag_ball_move; }            //is the ball in motion?
+    bool GetFlagBallMove() { return m_flag_ball_move; }            
     void SetFlagBallMove(bool flag) { m_flag_ball_move = flag; }
 
-    void StartGame();
-
-   
+    void StartGame();   
 
 private:
     Game();
+    ~Game();
 
     Image m_image;
 
-    Border m_board;                  // Border Map
+    Border m_board;                        // Border Map
     ConcretePlatform* m_platform;   
 
     std::list<class Block*> m_blocks;
@@ -35,18 +45,18 @@ private:
     std::list<class Ball*> m_balls;
     std::list<class Bullets*> m_bullets;
 
-    unsigned m_level;                // Current level number 
+    unsigned m_level;                      // Current level number 
     bool m_flag_ball_move;
 
-
-
+    CollisionManager* m_collision_manager;
+    Levels m_levels;
     
-
-    void GameLoop(RenderWindow& window);                    //Base game logic
+    int GameLoop(RenderWindow& window);   //Base game logic
     void GameObjectInit();
 
 };
 
+#endif; //GAME_H_
 
 
 
