@@ -58,7 +58,7 @@ void EventHandler::CollisionBallWithPlatform(Ball& ball, ConcretePlatform* platf
     }
 }
 
-void EventHandler::CollisionBallWithBlock(Ball& ball, Block& block, std::list<Bonus*> bonuses)
+void EventHandler::CollisionBallWithBlock(Ball& ball, Block& block, std::list<Bonus*>& bonuses)
 {
     Menu::GetInstance().SetCountScore(10 * Menu::GetInstance().GetCombo());
     Menu::GetInstance().IncreaseCombo();
@@ -97,7 +97,7 @@ void EventHandler::CollisionBulletsWithTop(Bullets& bullet)
     MusicAndSounds::GetInstance().BulletsHitBorderMapPlay();
 }
 
-void EventHandler::CollisionBulletsWithBlock(Bullets& bullet, Block& block, std::list<Bonus*> bonuses)
+void EventHandler::CollisionBulletsWithBlock(Bullets& bullet, Block& block, std::list<Bonus*>& bonuses)
 {
     MusicAndSounds::GetInstance().BulletsHitBlockPlay();
     if (block.GetFlagBonus())

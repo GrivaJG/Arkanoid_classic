@@ -2,17 +2,14 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include "Config.h"
-#include "Border.h"
-#include "Block.h"
-#include "Ball.h"
-#include "Bonus.h"
-#include "Platform.h"
-#include "Bullets.h"
-#include "MusicAndSounds.h"
-#include "CollisionManager.h"
-#include "Levels.h"
-
+class Border;
+class ConcretePlatform;
+class Ball;
+class Block;
+class Bonus;
+class Bullets;
+class CollisionManager;
+class Levels;
 
 class Game // Simple Singleton
 {
@@ -39,8 +36,8 @@ private:
 
     Border m_board;                        // Border Map
     ConcretePlatform* m_platform;   
-
-    std::list<class Block*> m_blocks;
+    
+    std::list<Block*> m_blocks;
     std::list<class Bonus*> m_bonuses;
     std::list<class Ball*> m_balls;
     std::list<class Bullets*> m_bullets;

@@ -1,5 +1,16 @@
 
+#include "Config.h"
+#include "Border.h"
+#include "Platform.h"
+#include "Block.h"
+#include "Bonus.h"
+#include "Ball.h"
+#include "Bullets.h"
 
+
+#include "MusicAndSounds.h"
+#include "CollisionManager.h"
+#include "Levels.h"
 
 #include "Game.h"
 
@@ -26,13 +37,13 @@ void Game::StartGame()
     MusicAndSounds::GetInstance().BaseMusicPlay();
 
     Menu::GetInstance().CreateStartMenu(window);                        // Startoviy ecran pered zapuskom igrvogo processa
-    
+    Menu::GetInstance().PlayerInit();                               // Pered nachalom igri ustanavlivaem ochki i gizni v startovie znacheniya
 
     m_level++;
     while (m_level <= 4 && window.isOpen())                             //Kostil
     {
         window.clear();
-        Menu::GetInstance().PlayerInit();                               // Pered nachalom igri ustanavlivaem ochki i gizni v startovie znacheniya
+       
         GameObjectInit();                                               // Privodim vse igrovie elementi v startovoe pologenie
         Menu::GetInstance().CreateLevelSplashScreen(window, m_board, m_level);
         m_levels.InitLevel(m_level, m_blocks);
@@ -40,6 +51,7 @@ void Game::StartGame()
         {
             Menu::GetInstance().SetScoreRecord();
             Menu::GetInstance().CreateStopGame(window, m_blocks, m_board, m_platform);
+            Menu::GetInstance().PlayerInit();
             m_level = 0;            
         }
         m_level++;                                                       
@@ -224,7 +236,7 @@ int Game::GameLoop(RenderWindow& window)
 
         if (m_blocks.empty())
         {
-            return 2;
+            return 0;
         }
 
         window.clear();

@@ -45,13 +45,13 @@ private:
     TEvent<class Ball&> CollisionBallWithRightWall;
     TEvent<class Ball&> CollisionBallWithTop;
     TEvent<class Ball&, ConcretePlatform*> CollisionBallWithBottom;
-    TEvent<class Ball&, Block&, std::list<Bonus*>> CollisionBallWithBlock;
+    TEvent<class Ball&, Block&, std::list<Bonus*>&> CollisionBallWithBlock;
     TEvent<class Ball&, ConcretePlatform*> CollisionBallWithPlatform;
     
     // Other Events
     TEvent<class ConcretePlatform*, class Bonus&, std::list<class Ball*>&> CollisionPlatformWithBonus;
     TEvent<class Bullets&> CollisionBulletsWithTop;
-    TEvent<class Bullets&, class Block&, std::list<class Bonus*>> CollisionBulletsWithBlock;
+    TEvent<class Bullets&, class Block&, std::list<class Bonus*>&> CollisionBulletsWithBlock;
     
 };
 
