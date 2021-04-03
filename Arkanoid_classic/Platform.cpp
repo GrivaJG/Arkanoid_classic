@@ -1,54 +1,42 @@
 
+#include "Ball.h"
 #include "Platform.h"
 #include "Config.h"
 #include "MusicAndSounds.h"
 
-
-
 //-------------------------------------------------------------------------Platform
-
-
-
-
-
-// Движение платформы
+// Move platform
 void Platform::Move(const float speed, const float time)
 {
     this->move(speed * time, 0);
 }
 
+// Collision platform with ball
+Vector2f Platform::CollisionWithBall(Ball& ball) // Peresechenie platformi s sharikom
+{    
+    float collisionLocation = CollisionLocation(ball);
 
-
-
-// Пересечение платформы с шариком
-// На вход принимаем шарик, который столкнулся с платформой и вектор его движения на единичной окружности
-// Возвращаем новый вектор движения шарика на единичной окружности
-Vector2f Platform::CollisionWithBall(Ball& ball) //Пересечение платформы с шариком
-{
-    
-    float collisionLocation = this->CollisionLocation(ball);
-
-    // Если центр шарика по координате х находится левее платформы
+    // Esli center sharika po koordinate x nahoditsya levee platformi 
     if (collisionLocation < 0)
     {
         return this->BallCollisionLeftWall(ball);
     }
-    // Если центр шарика по координате х находится на левом крае
+    // Esli center charika po koordinate x nahodytsya na levom krae
     else if (collisionLocation < 8)
     {
         return this->BallCollisionLeftEdge(ball);
     }
-    // Если центр шарика по координате х находится по середине между левым и правым краем
-    else if (collisionLocation < this->GetRect().width - 8)
+    // Esli center charika po koordinate x nahodytsya po seredine megdu levim i pravim kraem
+    else if (collisionLocation < GetRect().width - 8)
     {
         return this->BallCollisionStandart(ball);
     }
     // Если центр шарика по координате х находится на правом крае
-    else if (collisionLocation < this->GetRect().width)
+    else if (collisionLocation < GetRect().width)
     {
         return this->BallCollisionRightEdge(ball);
     }
-    // Если центр шарика по коориднае х находится правее платформы
+    // Esli center charika po koordinate x nahodytsya pravee platformi
     else
     {
         return this->BallCollisionRightWall(ball);
@@ -61,23 +49,23 @@ Vector2f Platform::BallCollisionLeftEdge(Ball& ball)
     ball.setPosition(ball.getPosition().x, this->getPosition().y - ball.GetRect().height);
     Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
 
-    //Если приземлились на платформу практически прямо
+    // Esli prizemlilis na platformu pod pramim uglom
     if (angleUnitCircle.x > -0.001 && angleUnitCircle.x < 0.001)
     {
         angleUnitCircle.x = -0.9;
         angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2));
         angleUnitCircle.y = -angleUnitCircle.y;
     }
-    else if (angleUnitCircle.x > 0) //иначе если летим слева направо и ударяемся в левый угол, то должны отразиться обратно
+    else if (angleUnitCircle.x > 0) // else esli letim sleva napravo i udaryaemsya v leviy ugol to dolgni otrazitsya obratno
     {
-        angleUnitCircle.x = -angleUnitCircle.x;        //отражаемся по х
-        angleUnitCircle.y = -angleUnitCircle.y;        //отражаемся по y                    
+        angleUnitCircle.x = -angleUnitCircle.x;        // otragaemsya po x
+        angleUnitCircle.y = -angleUnitCircle.y;        // otragaemsya po y
     }
-    else if (angleUnitCircle.x < 0) // Иначе если летим справа налево, то должны улететь под большим углом
+    else if (angleUnitCircle.x < 0) // else esli letim sprava nalevo, to dolgni uletet pod bOlshim uglom
     {
-        angleUnitCircle.x = -0.9;                                 //отражаемся по х
+        angleUnitCircle.x = -0.9;                                 // otragaemsya po x
         angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2)); 
-        angleUnitCircle.y = -angleUnitCircle.y;                    //отражаемся по y
+        angleUnitCircle.y = -angleUnitCircle.y;                   // otragaemsya po y
     }
 
     return angleUnitCircle;
@@ -90,23 +78,23 @@ Vector2f Platform::BallCollisionRightEdge(Ball& ball)
     ball.setPosition(ball.getPosition().x, this->getPosition().y - ball.GetRect().height);
     Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
 
-    //Если приземлились на платформу практически прямо
+    // Esli prizemlilis na platformu pod pramim uglom
     if (angleUnitCircle.x > -0.001 && angleUnitCircle.x < 0.001)
     {
         angleUnitCircle.x = 0.9;
         angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2));
         angleUnitCircle.y = -angleUnitCircle.y;
     }
-    else if (angleUnitCircle.x < 0) //иначе если летим cправа налево и ударяемся в правый угол, то должны отразиться обратно
+    else if (angleUnitCircle.x < 0) // else esli letim sprava nalevo i udaryaemsya v praviy ugol to dolgni otrazitsya obratno
     {
-        angleUnitCircle.x = -angleUnitCircle.x;        //отражаемся по х
-        angleUnitCircle.y = -angleUnitCircle.y;        //отражаемся по y                    
+        angleUnitCircle.x = -angleUnitCircle.x;        // otragaemsya po x
+        angleUnitCircle.y = -angleUnitCircle.y;        // otragaemsya po y              
     }
-    else if (angleUnitCircle.x > 0) // Иначе если летим слева направо, то должны улететь под большим углом
+    else if (angleUnitCircle.x > 0) // Else esli letim sleva napravo, to dolgni uletet pod bolshim uglom
     {
-        angleUnitCircle.x = 0.9;                                 //отражаемся по х
+        angleUnitCircle.x = 0.9;                                 // otragaemsya po x
         angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2));
-        angleUnitCircle.y = -angleUnitCircle.y;                      //отражаемся по y
+        angleUnitCircle.y = -angleUnitCircle.y;                      // otragaemsya po y 
     }
 
     return angleUnitCircle;
@@ -119,8 +107,8 @@ Vector2f Platform::BallCollisionStandart(Ball& ball)
     ball.setPosition(ball.getPosition().x, this->getPosition().y - ball.GetRect().height);
     Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
 
-    // Если по х практически не смещаемся и попадаем в центральную часть платформы, то должны улететь либо вправо, либо влево в зависимости от
-    //состояния переменной change_angel
+    // Esli po x prakticheski ne smeshamesya i popadayem v centralnuu chast platformi, to dolgni uletet libo vparvo, libo vlevo v zavisimosty  ot
+    // sostoyaniya peremennoi change_angel
     if (angleUnitCircle.x < 0.001 && angleUnitCircle.x > -0.001)
     {
         std::random_device rd;
@@ -138,7 +126,7 @@ Vector2f Platform::BallCollisionStandart(Ball& ball)
         angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2));
         angleUnitCircle.y = -angleUnitCircle.y;
     }
-    // Иначе просто меняем направления полета по y
+    // Else prosto menyaem napravlenie poleta po y
     else
     {
         angleUnitCircle.y = -angleUnitCircle.y;
@@ -149,94 +137,81 @@ Vector2f Platform::BallCollisionStandart(Ball& ball)
 
 Vector2f Platform::BallCollisionLeftWall(Ball& ball)
 {
-    //не даем шарику пролететь сквозь платформу
+    // Ne daem shariku proletet skvoz platformu
     ball.setPosition(this->GetRect().left - ball.GetRect().width, ball.getPosition().y);
     Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
 
-    angleUnitCircle.x = -1 * abs(angleUnitCircle.x); // однозначно летим только влево от платформы, по y продолжаем лететь как летели
+    angleUnitCircle.x = -1 * abs(angleUnitCircle.x); // odnoznachno letim tolko vlevo ot platformi, po y prodolgaem letet kak leteli
     return angleUnitCircle;
 }
 
 Vector2f Platform::BallCollisionRightWall(Ball& ball)
 {
-    // Не даем шарику залететь внутрь платформы
+    // Ne daem shariku zaletet vnutr platformi
     ball.setPosition(this->GetRect().left + this->GetRect().width, ball.getPosition().y);
     Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
 
-    angleUnitCircle.x = abs(angleUnitCircle.x); //однозначно летим вправо от платформы
+    angleUnitCircle.x = abs(angleUnitCircle.x); // odnoznachno letim vpravo ot platformi
     return angleUnitCircle;
 }
 
-// Определяем в какое место платформы попал шарик
+// Opredelyaem v kakoe mesto platformi popal sharik
 float Platform::CollisionLocation(Ball& ball)
 {
     return ball.GetRect().left + ( ball.GetRect().width / 2 ) - this->GetRect().left;
 }
 
-
-
-
-
 //-------------------------------------------------------------------------MediumPlatform
-
 MediumPlatform::MediumPlatform(Image& img) : Platform(img)
-{   
-    
-    this->setTexture(_texture);
-    this->setTextureRect(IntRect(MEDIUM_PLATFORM_LEFT, MEDIUM_PLATFORM_TOP, MEDIUM_PLATFORM_WIDTH, MEDIUM_PLATFORM_HEIGHT));    
-    
+{       
+    this->setTexture(m_texture);
+    this->setTextureRect(IntRect(MEDIUM_PLATFORM_LEFT, MEDIUM_PLATFORM_TOP, MEDIUM_PLATFORM_WIDTH, MEDIUM_PLATFORM_HEIGHT));        
 }
-
-
 
 //--------------------------------------------------------------------------SmallPlatform
 SmallPlatform::SmallPlatform(Image& img) : Platform(img)
 {   
-    this->setTexture(_texture);
-    this->setTextureRect(IntRect(SMALL_PLATFORM_LEFT, SMALL_PLATFORM_TOP, SMALL_PLATFORM_WIDTH, SMALL_PLATFORM_HEIGHT));
-    
+    this->setTexture(m_texture);
+    this->setTextureRect(IntRect(SMALL_PLATFORM_LEFT, SMALL_PLATFORM_TOP, SMALL_PLATFORM_WIDTH, SMALL_PLATFORM_HEIGHT));    
 }
 
-
-
 //--------------------------------------------------------------------------LargePlatform
-
 LargePlatform::LargePlatform(Image& img) : Platform(img)
 {   
-    this->setTexture(_texture);
+    this->setTexture(m_texture);
     this->setTextureRect(IntRect(LARGE_PLATFORM_LEFT, LARGE_PLATFORM_TOP, LARGE_PLATFORM_WIDTH, LARGE_PLATFORM_HEIGHT));    
 }
 
 Vector2f LargePlatform::CollisionWithBall(Ball& ball)
 {
     float collisionLocation = this->CollisionLocation(ball);
-    // Если центр шарика по координате х находится левее платформы
+    // Esli centr sharika po koordinate x nahoditsya levee platformi
     if (collisionLocation < 0)
     {
         return this->BallCollisionLeftWall(ball);
     }
-    // Если центр шарика по координате х находится на левом крае
+    // Esli center sharika po coordinate x nahoditsya na levom krae
     else if (collisionLocation < 8)
     {
         return this->BallCollisionLeftEdge(ball);
     }
-    // Если попали в край платформы основной зоны, но не в сам угол
+    // Esli popali v krai platformi osnovnoi zoni, no ne v sam ugol
     else if (collisionLocation < 16)
     {
         return this->BallCollisionLeftEdgePlus(ball);
     }
-    // Если попали в левую часть
+    // Esli popali v livuu chast
     else if (collisionLocation < 58)
     {
         return this->BallCollisionStandart(ball);
     }
-    // Если попали в самый центр
+    // Esli popali v samii center
     else if (collisionLocation < 72)
     {
         return this->BallCollisionCenter(ball);
     }
 
-    // Если попали в правую часть
+    // Esli popali v pravuu chast
     else if (collisionLocation < this->GetRect().width - 16)
     {
         return this->BallCollisionStandart(ball);
@@ -245,12 +220,12 @@ Vector2f LargePlatform::CollisionWithBall(Ball& ball)
     {
         return this->BallCollisionRightEdgePlus(ball);
     }
-    // Если центр шарика по координате х находится на правом крае
+    // Esli center sharika po koordinate x nahoditsya na pravom kraeЕсли центр шарика по координате х находится на правом крае
     else if (collisionLocation < this->GetRect().width)
     {
         return this->BallCollisionRightEdge(ball);
     }
-    // Если центр шарика по коориднае х находится правее платформы
+    // Esli center sharika po koordinate x nahoditsya pravee platformi
     else
     {
         return this->BallCollisionRightWall(ball);
@@ -259,24 +234,24 @@ Vector2f LargePlatform::CollisionWithBall(Ball& ball)
 
 Vector2f LargePlatform::BallCollisionLeftEdgePlus(Ball& ball)
 {
-    ball.setPosition(ball.getPosition().x, this->getPosition().y - ball.GetRect().height); //если пересекли платформу, то выталкиваем шарик из платформы
+    ball.setPosition(ball.getPosition().x, this->getPosition().y - ball.GetRect().height); // Esli peresekli platformu, to vitalkivaem sharik iz platformi
     Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
 
-    if (angleUnitCircle.x < 0.001 && angleUnitCircle.x > -0.001) //Если по х практически не смещаемся и попадаем в левый край, то должны слегка изменить свою траекторию
+    if (angleUnitCircle.x < 0.001 && angleUnitCircle.x > -0.001) // Esli po x prakticheski ne smeshaemsya i popadaem v levii krai, to dolgni slegka izmenit svou traektoriu
     {
         angleUnitCircle.x += -0.35;
         angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2));
         angleUnitCircle.y = -angleUnitCircle.y;
     }
-    else if (angleUnitCircle.x < 0) //иначе если летим справа налево и ударяемся в левый угол, то должны отразиться налево на чуть больший угол
+    else if (angleUnitCircle.x < 0) // Else esli letim sprava nalevo i udaryaemsya v livii ugol, to dolgni otrazitsya nalevo na chut bolshiy ugol
     {
-        if (angleUnitCircle.x > -0.8)     //проверяем не слишком ли тупой угол, чтобы шарик не начал летать параллельно платформе
-            angleUnitCircle.x += -0.19;   //увеличиваем угол
+        if (angleUnitCircle.x > -0.8)     // Proveryaem ne sliskom li tupoi ugol, chtobi sharik ne nachal letat parallelno platforme
+            angleUnitCircle.x += -0.19;   // Uvelichivaem ugol
 
-        angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2)); //приводим угол по у в соовтетствии с х
+        angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2)); // Privodim ugol po Y v sootevetstvie s X
         angleUnitCircle.y = -angleUnitCircle.y;
     }
-    // иначе, если летим слева направо то не меняем направление движения по х, а только по y
+    // Else, esli letim sleva napravo to ne menyaem napravlenie dvigenia po x, a tolko po y
     else
     {
         angleUnitCircle.y = -angleUnitCircle.y;
@@ -288,24 +263,24 @@ Vector2f LargePlatform::BallCollisionLeftEdgePlus(Ball& ball)
 
 Vector2f LargePlatform::BallCollisionRightEdgePlus(Ball& ball)
 {
-    ball.setPosition(ball.getPosition().x, this->getPosition().y - ball.GetRect().height); //если пересекли платформу, то выталкиваем шарик из платформы
+    ball.setPosition(ball.getPosition().x, this->getPosition().y - ball.GetRect().height); // Esli peresekly platformu, to vitalkivaem sharik iz platformi
     Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
 
-    if (angleUnitCircle.x < 0.001 && angleUnitCircle.x > -0.001) //Если по х практически не смещаемся и попадаем в правый край, то должны слегка изменить свою траекторию
+    if (angleUnitCircle.x < 0.001 && angleUnitCircle.x > -0.001) // Esli po X prakticheski ne smeshaemsya i popadaem v praviy krai, to dolgni slegka izmenit svou traektoriu
     {
         angleUnitCircle.x += +0.35;
         angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2));
         angleUnitCircle.y = -angleUnitCircle.y;
     }
-    else if (angleUnitCircle.x > 0) //иначе если летим слева направо и ударяемся в правый угол, то должны отразиться вправо на чуть больший угол
+    else if (angleUnitCircle.x > 0) // Else esli letim napravo i udaryaemsya v praviy ugol, to dolgni otrazitsya vpravo na chut bolshiy ugol
     {
-        if (angleUnitCircle.x < 0.8)     //проверяем не слишком ли тупой угол, чтобы шарик не начал летать параллельно платформе
-            angleUnitCircle.x += 0.19;   //увеличиваем угол
+        if (angleUnitCircle.x < 0.8)     // Proveryaem ne slishkom li tupoy ugol, chtobi sharik ne nachal letat parallelno platforme
+            angleUnitCircle.x += 0.19;   // Uvelichivaem ugol
 
-        angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2)); //приводим угол по у в соовтетствии с х
+        angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2)); // Privodim ugol po Y v sootvetstvii s X
         angleUnitCircle.y = -angleUnitCircle.y;
     }
-    // иначе, если летим справа налево то не меняем направление движения по х, а только по y
+    // Else, esli letim sprava nalevo to ne menyaem napravlenie dvigeniya po X, a tolko po Y
     else
     {
         angleUnitCircle.y = -angleUnitCircle.y;
@@ -316,13 +291,13 @@ Vector2f LargePlatform::BallCollisionRightEdgePlus(Ball& ball)
 
 Vector2f LargePlatform::BallCollisionCenter(Ball& ball)
 {
-    ball.setPosition(ball.getPosition().x, this->GetRect().top - ball.GetRect().height-5); //если пересекли платформу, то выталкиваем шарик из платформы
+    ball.setPosition(ball.getPosition().x, this->GetRect().top - ball.GetRect().height-5); // Esli peresekly platformu, to vitalkivaem sharik iz platformi
     Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
 
     std::random_device rd;
     std::mt19937 mersenne(rd());
-    //Если по х практически не смещаемся и попадаем в центральную часть платформы, то должны улететь либо вправо, либо влево в зависимости от
-    //состояния переменной change_angel
+    // Esli po x prakticheski ne smeshamesya i popadayem v centralnuu chast platformi, to dolgni uletet libo vparvo, libo vlevo v zavisimosty  ot
+    // sostoyaniya peremennoi change_angel
     if (angleUnitCircle.x < 0.001 && angleUnitCircle.x > -0.001)
     {
         if (mersenne()%2)
@@ -336,37 +311,36 @@ Vector2f LargePlatform::BallCollisionCenter(Ball& ball)
         angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2));
         angleUnitCircle.y = -angleUnitCircle.y;
     }
-    else //Иначе если двигались слева направо или справа налево, то начинаем лететь вертикально вверх
+    else // Else esli dvigalis sleva napravo ili sprava nalevo, to nachinaem letet verticalno vverh
     {
         
         angleUnitCircle.x = 0;
         angleUnitCircle.y = -1;        
     }
-
     return angleUnitCircle;
 }
 
 
 
 
-//------------------------------------------------------------Класс композиции для быстрой подмены платформ
+//------------------------------------------------------------Klass kompozicii dlya bistroi podmeni platform
 
 
 
-ConcretePlatform::ConcretePlatform(Image& img) : _image(img)
+ConcretePlatform::ConcretePlatform(Image& img) : m_image(img)
 {
-    _smallPlatform = new SmallPlatform(_image);
-    _mediumPlatform = new MediumPlatform(_image);
-    _largePlatform = new LargePlatform(_image);
-    _concretePlatform = _mediumPlatform;
-    _sizePlatform = mediumPlatform;
+    m_small_platform = new SmallPlatform(m_image);
+    m_medium_platform = new MediumPlatform(m_image);
+    m_large_platform = new LargePlatform(m_image);
+    m_concrete_platform = m_medium_platform;
+    m_size_platform = mediumPlatform;
 }
 
 ConcretePlatform::~ConcretePlatform()
 {    
-    delete _smallPlatform;
-    delete _mediumPlatform;
-    delete _largePlatform;
+    delete m_small_platform;
+    delete m_medium_platform;
+    delete m_large_platform;
    
 }
 
@@ -374,23 +348,23 @@ ConcretePlatform::~ConcretePlatform()
 void ConcretePlatform::ChangePlatform(int sizePlatform)
 {
     MusicAndSounds::GetInstance().ChangePlatformPlay();
-    Vector2f position = _concretePlatform->getPosition();
+    Vector2f position = m_concrete_platform->getPosition();
     if (sizePlatform <= smallPlatform)
     {
-        _sizePlatform = smallPlatform;
-        _concretePlatform = _smallPlatform;        
+        m_size_platform = smallPlatform;
+        m_concrete_platform = m_small_platform;        
     }
     else if (sizePlatform == mediumPlatform)
     {
-        _sizePlatform = mediumPlatform;
-        _concretePlatform = _mediumPlatform;
+        m_size_platform = mediumPlatform;
+        m_concrete_platform = m_medium_platform;
     }
     else
     {
-        _sizePlatform = largePlatform;
-        _concretePlatform = _largePlatform;
+        m_size_platform = largePlatform;
+        m_concrete_platform = m_large_platform;
     }
 
-    _concretePlatform->setPosition(position);
+    m_concrete_platform->setPosition(position);
 }
 

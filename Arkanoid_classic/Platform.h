@@ -6,105 +6,88 @@
 #include "Ball.h"
 
 
-
 class Platform : public GameObject
 {
+public:
+	Platform(Image& img) : GameObject(img) { m_bullets = 0; }
+	virtual ~Platform() {};
+
+	// Methods
+	void Move(const float speed, const float time);
+	void SetBullets() { m_bullets += 10; }
+	void ReSetBullets() { m_bullets = 0; }
+	void Fire() { m_bullets -= 2; }
+	bool GetBullets() { return m_bullets; }
+
+	// virtual methods
+	virtual Vector2f CollisionWithBall(Ball& ball); // Function collision handler
 
 protected:
 
-	unsigned _Bullets;
+	uint8_t m_bullets;
 
-	Vector2f BallCollisionLeftEdge(Ball& ball);			// Попали в верхнюю часть платформы в левый край (0-8 пиксель)
-	Vector2f BallCollisionRightEdge(Ball& ball);		// Попали в верхнюю часть платформы в правый край (0-8 пиксель с правого края)
-	Vector2f BallCollisionStandart(Ball& ball);			// Попали в верхнюю часть платформы
-	Vector2f BallCollisionLeftWall(Ball& ball);			// Попали в левую стену платформы
-	Vector2f BallCollisionRightWall(Ball& ball);		// Попали в правую стену платформы
+	Vector2f BallCollisionLeftEdge(Ball& ball);			
+	Vector2f BallCollisionRightEdge(Ball& ball);		
+	Vector2f BallCollisionStandart(Ball& ball);			
+	Vector2f BallCollisionLeftWall(Ball& ball);			
+	Vector2f BallCollisionRightWall(Ball& ball);			
 	
-	float CollisionLocation(Ball& ball);				// Определяем позицию столкновения на платформе
-	
-
-public:
-	Platform(Image& img) : GameObject(img) { _Bullets = 0; }
-	virtual ~Platform() {};
-
-	
-	// Методы для всех наследников
-	void Move(const float speed, const float time);	
-	void SetBullets() { _Bullets += 10; }
-	void ReSetBullets() { _Bullets = 0; }
-	void Fire() { _Bullets -= 2; }
-	bool GetBullets() { return _Bullets; }
-
-
-
-	// Виртуальные методы
-	virtual Vector2f CollisionWithBall(Ball& ball); // Функция обрабатывает столкновение
+	float CollisionLocation(Ball& ball);				// Opredelyaem coord stolknoveniya
 };
 
-//---------------------------------------Большая платформа
-
+//---------------------------------------LargePlatform
 class LargePlatform : public Platform
 {
-private:
-	
-	Vector2f BallCollisionLeftEdgePlus(Ball& ball);
-	Vector2f BallCollisionRightEdgePlus(Ball& ball);
-	Vector2f BallCollisionCenter(Ball& ball);
-
-
-
 public:
 	LargePlatform(Image& img);
 	~LargePlatform() {}
 
+	virtual Vector2f CollisionWithBall(Ball& ball) override; // Pereopredelyaem obrabotku stolknoveniya s sharikom
 
-	virtual Vector2f CollisionWithBall(Ball& ball) override; // Переопределяет обработку столкновения с шариком
-	
+private:
+	Vector2f BallCollisionLeftEdgePlus(Ball& ball);
+	Vector2f BallCollisionRightEdgePlus(Ball& ball);
+	Vector2f BallCollisionCenter(Ball& ball);	
 };
 
 
-//----------------------------------------Средняя платформа
+//----------------------------------------MiddlePlatform
 class MediumPlatform : public Platform
-{
-private:
-	
+{	
 public:
 	MediumPlatform(Image& img);
 	~MediumPlatform() {}
 };
 
-//-----------------------------------------Маленькая платформа
-
+//-----------------------------------------SmallPlatform
 class SmallPlatform : public Platform
 {
 public:
 	SmallPlatform(Image& img);
 	~SmallPlatform(){}
-
 };
 
-//-------------------------------------------Класс композиции платформ
+//-------------------------------------------Class composition platform
 class ConcretePlatform
 {
-private:
-	Image& _image;
-
-	Platform* _concretePlatform = NULL;
-	MediumPlatform* _mediumPlatform = NULL;
-	LargePlatform* _largePlatform = NULL;
-	SmallPlatform* _smallPlatform = NULL;
-
-	sizePlatform _sizePlatform;
-
 public:
 	ConcretePlatform(Image& img);
 	~ConcretePlatform();
 
-	Platform* GetInstance() { return _concretePlatform; }
+	Platform* GetInstance() { return m_concrete_platform; }
 
 	void ChangePlatform(int sizePlatform);
-	sizePlatform GetSizePlatform() { return _sizePlatform; }
+	sizePlatform GetSizePlatform() { return m_size_platform; }
 
+private:
+	Image& m_image;
+
+	Platform* m_concrete_platform = NULL;
+	MediumPlatform* m_medium_platform = NULL;
+	LargePlatform* m_large_platform = NULL;
+	SmallPlatform* m_small_platform = NULL;
+
+	sizePlatform m_size_platform;
 };
 
 #endif

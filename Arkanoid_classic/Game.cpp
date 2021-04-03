@@ -1,23 +1,17 @@
 
-#include "Config.h"
-#include "Border.h"
-#include "Platform.h"
 #include "Block.h"
-#include "Bonus.h"
 #include "Ball.h"
+#include "Bonus.h"
 #include "Bullets.h"
-
-
 #include "MusicAndSounds.h"
+
 #include "CollisionManager.h"
 #include "Levels.h"
+#include "Menu.h"
 
 #include "Game.h"
 
-
-
-
-unsigned Ball::_ballCounter = 0;
+uint16_t Ball::m_ball_counter = 0;
 
 Game::Game() : m_levels(m_image), m_flag_ball_move(false), m_level(0)
 {
@@ -37,13 +31,12 @@ void Game::StartGame()
     MusicAndSounds::GetInstance().BaseMusicPlay();
 
     Menu::GetInstance().CreateStartMenu(window);                        // Startoviy ecran pered zapuskom igrvogo processa
-    Menu::GetInstance().PlayerInit();                               // Pered nachalom igri ustanavlivaem ochki i gizni v startovie znacheniya
+    Menu::GetInstance().PlayerInit();                                   // Pered nachalom igri ustanavlivaem ochki i gizni v startovie znacheniya
 
     m_level++;
     while (m_level <= 4 && window.isOpen())                             //Kostil
     {
-        window.clear();
-       
+        window.clear();        
         GameObjectInit();                                               // Privodim vse igrovie elementi v startovoe pologenie
         Menu::GetInstance().CreateLevelSplashScreen(window, m_board, m_level);
         m_levels.InitLevel(m_level, m_blocks);
@@ -61,13 +54,13 @@ void Game::StartGame()
 }
 
 
-int Game::GameLoop(RenderWindow& window)
+uint8_t Game::GameLoop(RenderWindow& window)
 {  
     // Random number for zadaniya sluchainogo vectora dvigeniya sharika
     std::random_device rd;
     std::mt19937 mersenne(rd());
 
-    double angle_unit_circleX = 0;         // Variables v kotorih budet hranitsya vector dlya sluchainogo poleta sharika pri pervom zapuske
+    double angle_unit_circleX = 0;         // Peremennie v kotorih budet hranitsya vector dlya sluchainogo poleta sharika pri pervom zapuske
     double angle_unit_circleY = 0;
 
     
@@ -75,10 +68,10 @@ int Game::GameLoop(RenderWindow& window)
     Clock clock_for_bullets;
     Clock clock_for_ball_speed;
 
-    std::list<Block*>::iterator blk;
-    std::list<Bonus*>::iterator bns;
-    std::list<Ball*>::iterator bl;
-    std::list<Bullets*>::iterator blts;    
+    std::vector<Block*>::iterator blk;
+    std::vector<Bonus*>::iterator bns;
+    std::vector<Ball*>::iterator bl;
+    std::vector<Bullets*>::iterator blts;    
 
     while (window.isOpen())
     {
@@ -114,7 +107,7 @@ int Game::GameLoop(RenderWindow& window)
                     m_flag_ball_move = true;
                 }
 
-                std::list<Ball*>::iterator bl;
+                std::vector<Ball*>::iterator bl;
                 // Esli poimali bonus prilipaniya to otlipaem on nee zdes
                 for (bl = m_balls.begin(); bl != m_balls.end(); bl++)
                 {
@@ -127,8 +120,6 @@ int Game::GameLoop(RenderWindow& window)
 
             }
         }
-
-
         //-------------------------------------------Create additional elements
 
         // Esli poluchen bonus sozdaniya bullets to sozdaem bullets
@@ -156,8 +147,6 @@ int Game::GameLoop(RenderWindow& window)
 
             }
         }
-
-
         //-------------------------------------------------Moving elements
 
         // Moving Platform
@@ -200,14 +189,14 @@ int Game::GameLoop(RenderWindow& window)
         }
 
         // Moving bonus
-        std::list<Bonus*>::iterator bns;
+        std::vector<Bonus*>::iterator bns;
         for (bns = m_bonuses.begin(); bns != m_bonuses.end(); bns++)
         {
             (*bns)->Move(time);
         }
 
         // Moving bullets
-        std::list<Bullets*>::iterator blts;
+        std::vector<Bullets*>::iterator blts;
         for (blts = m_bullets.begin(); blts != m_bullets.end(); blts++)
         {
             (*blts)->Move(time);
@@ -216,9 +205,7 @@ int Game::GameLoop(RenderWindow& window)
         // --------------------------------------------------------------------Posle vseh peremesheniy proveryaem stolknoveniya
         m_collision_manager->CollisionDetecter();
 
-
         // --------------------------------------------------------------------Uskoryaem sharik cherez vremennie intervali (kostil)
-
         if (time_for_ball_speed > 10000)
         {
             clock_for_ball_speed.restart();
@@ -227,7 +214,6 @@ int Game::GameLoop(RenderWindow& window)
                 (*bl)->SetSpeedFast();
             }
         }
-
         // -------------------------------------------Proveryaem kolichestvo gizney i esly oni zakonchilis - zakanchivaem igru
         if (Menu::GetInstance().GetCountlives() <= 0)
         {
@@ -264,14 +250,10 @@ int Game::GameLoop(RenderWindow& window)
 
         window.display();
     }
-
     return 0;
 }
 
-
-
 //---------------------------------------------------------------------Initialization default values of the game objects
-
 void Game::GameObjectInit()
 {
     m_platform->ChangePlatform(mediumPlatform);
@@ -280,7 +262,7 @@ void Game::GameObjectInit()
 
     m_flag_ball_move = false;
 
-    std::list<Ball*>::iterator bl;
+    std::vector<Ball*>::iterator bl;
 
     while (!m_balls.empty())
     {
@@ -289,7 +271,7 @@ void Game::GameObjectInit()
         bl = m_balls.erase(bl);
     }
 
-    std::list<Block*>::iterator blk;
+    std::vector<Block*>::iterator blk;
 
     while (!m_blocks.empty())
     {
@@ -298,7 +280,7 @@ void Game::GameObjectInit()
         blk = m_blocks.erase(blk);
     }
 
-    std::list<Bonus*>::iterator bns;
+    std::vector<Bonus*>::iterator bns;
     while (!m_bonuses.empty())
     {
         bns = m_bonuses.begin();
@@ -311,22 +293,14 @@ void Game::GameObjectInit()
     (*bl)->setPosition(BALL_START_POSITION);
 }
 
-
-
-
-
-
-
-
-
 Game::~Game()
 {
     delete m_platform;
 
-    std::list<Block*>::iterator blk;
-    std::list<Bonus*>::iterator bns;
-    std::list<Ball*>::iterator bl;
-    std::list<Bullets*>::iterator blts;
+    std::vector<Block*>::iterator blk;
+    std::vector<Bonus*>::iterator bns;
+    std::vector<Ball*>::iterator bl;
+    std::vector<Bullets*>::iterator blts;
 
     while (!m_blocks.empty())
     {

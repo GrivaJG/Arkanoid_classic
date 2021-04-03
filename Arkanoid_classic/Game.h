@@ -2,14 +2,13 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-class Border;
-class ConcretePlatform;
-class Ball;
+#include "Config.h"
+#include "Border.h"
+#include "Levels.h"
+#include "Platform.h"
+
 class Block;
-class Bonus;
-class Bullets;
 class CollisionManager;
-class Levels;
 
 class Game // Simple Singleton
 {
@@ -36,21 +35,21 @@ private:
 
     Border m_board;                        // Border Map
     ConcretePlatform* m_platform;   
-    
-    std::list<Block*> m_blocks;
-    std::list<class Bonus*> m_bonuses;
-    std::list<class Ball*> m_balls;
-    std::list<class Bullets*> m_bullets;
 
-    unsigned m_level;                      // Current level number 
+    std::vector<class Block*> m_blocks;
+    std::vector<class Bonus*> m_bonuses;
+    std::vector<class Ball*> m_balls;
+    std::vector<class Bullets*> m_bullets;
+
+    uint16_t m_level;                      // Current level number 
     bool m_flag_ball_move;
 
-    CollisionManager* m_collision_manager;
     Levels m_levels;
+    CollisionManager* m_collision_manager;
     
-    int GameLoop(RenderWindow& window);   //Base game logic
+    
+    uint8_t GameLoop(RenderWindow& window);   //Base game logic
     void GameObjectInit();
-
 };
 
 #endif; //GAME_H_

@@ -6,88 +6,90 @@
 
 
 
-Ball::Ball(Image& img, float acceleration, bool flagInit) : GameObject(img)
-{   
-    this->setTexture(_texture);
+Ball::Ball(Image& img, float acceleration, bool flag_init) : GameObject(img)
+{
+
+    this->setTexture(m_texture);
     this->setTextureRect(sf::IntRect(BLUE_BALL_LEFT, BLUE_BALL_TOP, BLUE_BALL_WIDTH, BLUE_BALL_HEIGHT));
    
-    _acceleration = acceleration;
+    m_acceleration = acceleration;
    
-   _flagInit = flagInit;
-   _flagCatch = false;
-   _flagBallCatchPosition = false;
-   _catchCounter = 0;
+    m_flag_init = flag_init;
+    m_flag_catch = false;
+    m_flag_ball_catch_position = false;
+    m_catch_counter = 0;
+    m_catch_positionX = 0;
    
-   _ballCounter++;
+    m_ball_counter++;
 }
 
 
 
-void Ball::Move(double angleUnitCircleX, double angleUnitCircleY, float time)
+void Ball::Move(double angle_unit_circleX, double angle_unit_circleY, float time)
 {
-    // В этот блок попадаем при первой инициализации угла, на который вылетит шарик при нажатии клавиши space
-    if (_flagInit)
+    // Block for first initialization angle. Tolko pri pervom zapuske sharika s platformi
+    if (m_flag_init)
     {
-        _flagInit = false;
-        _angleUnitCircle.x = angleUnitCircleX; // Координаты точки на единичной окружности (направление полета шарика)
-        _angleUnitCircle.y = angleUnitCircleY;
+        m_flag_init = false;
+        m_angle_unit_circle.x = angle_unit_circleX; // Coord tochki na edinichnoi okruzhnosti 
+        m_angle_unit_circle.y = angle_unit_circleY;
     }
 
-     _speed = Vector2f (_acceleration * time * _angleUnitCircle.x, _acceleration*time* _angleUnitCircle.y); // Вектор полета шарика
+     m_speed = Vector2f (m_acceleration * time * m_angle_unit_circle.x, m_acceleration*time* m_angle_unit_circle.y); // Vector poleta sharika
     
-    this->move(_speed); // Вызываем стандартную функцию move от класса Sprite
+    this->move(m_speed); // Standart function move of SFML
 
 }
 
 
-// Увеличиваем скорость шарика в два раза
+// Increase speed
 void Ball::SetSpeedFast()
 {
-    if (_acceleration < 0.8)
+    if (m_acceleration < MAX_BALL_SPEED)
     {
-        _acceleration += 0.1;
+        m_acceleration += 0.1;
     }
     
 }
 
-// Уменьшаем скорость шарика в два раза
+// Decrease speed
 void Ball::SetSpeedSlow()
 {
-    if (_acceleration >= 0.3)
+    if (m_acceleration >= DEFAULT_BALL_SPEED)
     {
-        _acceleration /= 2;
+        m_acceleration /= 2;
     }
-    if (_acceleration < 0.3)
+    if (m_acceleration < DEFAULT_BALL_SPEED)
     {
-        _acceleration = 0.3;
+        m_acceleration = DEFAULT_BALL_SPEED;
     }
         
 }
 
 
-// Сбрасываем скорость в начальную
+// Default speed
 void Ball::ResetSpeed()
 {
-    _acceleration = 0.3;
+    m_acceleration = DEFAULT_BALL_SPEED;
 }
 
 
 
-void Ball::CollisionWithLeftWall()
+void Ball::CollisionWithLeftWall() // If intersect left wall  
 {
-    this->setPosition(BORDER_LEFT, this->getPosition().y);                                            // if intersect left wall  
-    this->SetAngleUnitCircle(Vector2f(-this->GetAngleUnitCircle().x, this->GetAngleUnitCircle().y));  // change direction move    
+    this->setPosition(BORDER_LEFT, this->getPosition().y);                                            
+    this->SetAngleUnitCircle(Vector2f(-this->GetAngleUnitCircle().x, this->GetAngleUnitCircle().y));  // Change direction move    
 }
 
-void Ball::CollisionWithRightWall()
+void Ball::CollisionWithRightWall() // If intersect Right wall
 {    
-    this->setPosition(BORDER_RIGHT - this->GetRect().width, this->getPosition().y);                  // if intersect Right wall
-    this->SetAngleUnitCircle(Vector2f(-this->GetAngleUnitCircle().x, this->GetAngleUnitCircle().y)); // change direction move   
+    this->setPosition(BORDER_RIGHT - this->GetRect().width, this->getPosition().y);                  
+    this->SetAngleUnitCircle(Vector2f(-this->GetAngleUnitCircle().x, this->GetAngleUnitCircle().y)); // Change direction move   
 }
 
-void Ball::CollisionWithTop()
+void Ball::CollisionWithTop()  // If intersect Top
 {
-    this->setPosition(this->getPosition().x, BORDER_TOP);                                                 // if intersect Top
-    this->SetAngleUnitCircle(Vector2f(this->GetAngleUnitCircle().x, -this->GetAngleUnitCircle().y));      // change direction move    
+    this->setPosition(this->getPosition().x, BORDER_TOP);                                                
+    this->SetAngleUnitCircle(Vector2f(this->GetAngleUnitCircle().x, -this->GetAngleUnitCircle().y));      // Change direction move    
 }
 

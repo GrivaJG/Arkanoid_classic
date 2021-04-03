@@ -1,39 +1,44 @@
-﻿  Arkanoid_classic.cpp
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(35,18): error C3646: m_image: неизвестный спецификатор переопределения
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(35,18): error C4430: отсутствует спецификатор типа - предполагается int. Примечание. C++ не поддерживает int по умолчанию
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(37,12): error C2079: "Game::m_board" использует не имеющую определения структуру class "Border"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(40,10): error C2039: "list": не является членом "std".
-F:\My_project\С++\Arkanoid\Arkanoid_classic\predefined C++ types (compiler internal)(418): message : см. объявление "std"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(40,14): error C2143: синтаксическая ошибка: отсутствие ";" перед "<"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(40,14): error C4430: отсутствует спецификатор типа - предполагается int. Примечание. C++ не поддерживает int по умолчанию
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(40,31): error C2238: непредвиденные лексемы перед ";"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(41,9): error C2143: синтаксическая ошибка: отсутствие ";" перед "<"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(41,9): error C4430: отсутствует спецификатор типа - предполагается int. Примечание. C++ не поддерживает int по умолчанию
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(41,33): error C2238: непредвиденные лексемы перед ";"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(42,9): error C2143: синтаксическая ошибка: отсутствие ";" перед "<"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(42,9): error C4430: отсутствует спецификатор типа - предполагается int. Примечание. C++ не поддерживает int по умолчанию
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(42,30): error C2238: непредвиденные лексемы перед ";"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(43,9): error C2143: синтаксическая ошибка: отсутствие ";" перед "<"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(43,9): error C4430: отсутствует спецификатор типа - предполагается int. Примечание. C++ не поддерживает int по умолчанию
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(43,35): error C2238: непредвиденные лексемы перед ";"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(49,12): error C2079: "Game::m_levels" использует не имеющую определения структуру class "Levels"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(51,30): error C2061: синтаксическая ошибка: идентификатор "RenderWindow"
-  EventHandler.cpp
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Menu.h(8,32): warning C4081: требуется "newline"; обнаружен ";"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(41,9): error C2143: синтаксическая ошибка: отсутствие ";" перед "<"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(41,9): error C4430: отсутствует спецификатор типа - предполагается int. Примечание. C++ не поддерживает int по умолчанию
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(41,33): error C2238: непредвиденные лексемы перед ";"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(42,9): error C2143: синтаксическая ошибка: отсутствие ";" перед "<"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(42,9): error C4430: отсутствует спецификатор типа - предполагается int. Примечание. C++ не поддерживает int по умолчанию
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(42,30): error C2238: непредвиденные лексемы перед ";"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(43,9): error C2143: синтаксическая ошибка: отсутствие ";" перед "<"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(43,9): error C4430: отсутствует спецификатор типа - предполагается int. Примечание. C++ не поддерживает int по умолчанию
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(43,35): error C2238: непредвиденные лексемы перед ";"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.h(49,12): error C2079: "Game::m_levels" использует не имеющую определения структуру class "Levels"
-  Game.cpp
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Menu.h(8,32): warning C4081: требуется "newline"; обнаружен ";"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.cpp(86,20): warning C4244: инициализация: преобразование "sf::Int64" в "float", возможна потеря данных
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.cpp(90,34): warning C4244: инициализация: преобразование "sf::Int32" в "float", возможна потеря данных
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.cpp(91,35): warning C4244: инициализация: преобразование "sf::Int32" в "float", возможна потеря данных
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.cpp(135,56): warning C4804: >: небезопасное использование типа "bool" в операции
-  Создание кода...
+﻿  Platform.cpp
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Config.h(228,37): warning C4305: инициализация: усечение из "double" в "float"
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Config.h(229,33): warning C4305: инициализация: усечение из "double" в "float"
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(55,33): warning C4305: =: усечение из "double" в "T"
+          with
+          [
+              T=float
+          ]
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(66,33): warning C4305: =: усечение из "double" в "T"
+          with
+          [
+              T=float
+          ]
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(84,32): warning C4305: =: усечение из "double" в "T"
+          with
+          [
+              T=float
+          ]
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(95,32): warning C4305: =: усечение из "double" в "T"
+          with
+          [
+              T=float
+          ]
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(242,35): warning C4305: +=: усечение из "double" в "T"
+          with
+          [
+              T=float
+          ]
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(249,39): warning C4305: +=: усечение из "double" в "T"
+          with
+          [
+              T=float
+          ]
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(271,35): warning C4305: +=: усечение из "double" в "T"
+          with
+          [
+              T=float
+          ]
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(278,38): warning C4305: +=: усечение из "double" в "T"
+          with
+          [
+              T=float
+          ]
+  Arkanoid_classic.vcxproj -> F:\My_project\С++\Arkanoid\Arkanoid_classic\x64\Debug\Arkanoid_classic.exe

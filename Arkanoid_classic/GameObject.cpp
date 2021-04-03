@@ -1,22 +1,12 @@
 
 #include "GameObject.h"
 
-//------------------------------------// GameObject //------------------------------------//
-
-GameObject::GameObject(Image& img) : _image(img)
+GameObject::GameObject(Image& img) : m_image(img)
 {   
-    _texture.loadFromImage(_image);  
+    m_texture.loadFromImage(m_image);  
 }
 
 FloatRect GameObject::GetRect()
 {
     return FloatRect(this->getGlobalBounds().left, this->getGlobalBounds().top, this->getGlobalBounds().width, this->getGlobalBounds().height);
 }
-
-
-
-
-
-
-
-

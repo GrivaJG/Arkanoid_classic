@@ -1,10 +1,17 @@
 
+#include "Bullets.h"
+#include "Platform.h"
+#include "Ball.h"
+#include "Block.h"
+#include "Bonus.h"
+#include "MusicAndSounds.h"
 
+#include "Event.h"
 
 #include "CollisionManager.h"
 
-CollisionManager::CollisionManager(ConcretePlatform* platform, std::list<Ball*>& ball, std::list<Block*>& block, std::list<Bonus*>& bonus,
-    std::list<Bullets*>& bullets) : m_platform(platform), m_balls(ball), m_blocks(block), m_bonuses(bonus), m_bullets(bullets)
+CollisionManager::CollisionManager(ConcretePlatform* platform, std::vector<Ball*>& ball, std::vector<Block*>& block, std::vector<Bonus*>& bonus,
+    std::vector<Bullets*>& bullets) : m_platform(platform), m_balls(ball), m_blocks(block), m_bonuses(bonus), m_bullets(bullets)
 {
     //Podpisivaemsya na sobitiya
     CollisionBallWithLeftWall += METHOD_HANDLER(event_handler, EventHandler::CollisionBallWithLeftWall);
@@ -32,8 +39,6 @@ CollisionManager::~CollisionManager()
     CollisionBulletsWithBlock -= METHOD_HANDLER(event_handler, EventHandler::CollisionBulletsWithBlock);
 }
 
-
-
 void CollisionManager::CollisionDetecter()
 {
     BallCollision();     // All Collision with balls
@@ -43,11 +48,10 @@ void CollisionManager::CollisionDetecter()
     BulletsCollision();  // Bullets collision with blocks and top
 }
 
-
 void CollisionManager::BallCollision()
 {
-    list<Ball*>::iterator bl;
-    list<Block*>::iterator blk;
+    vector<Ball*>::iterator bl;
+    vector<Block*>::iterator blk;
 
     for (bl = m_balls.begin(); bl != m_balls.end();)
     {
@@ -91,8 +95,6 @@ void CollisionManager::BallCollision()
                 blk++;
             }
         }
-
-
         //--------------------------------------------------------------------If ball fallen
         if ((*bl)->getPosition().y > BORDER_BOTTOM)
         {
@@ -115,15 +117,10 @@ void CollisionManager::BallCollision()
     }
 }
 
-
-
 void CollisionManager::PlatformCollision()
 {
-
     //-------------------------------------------------------------------Intersect Platform with bonus
-    
-    
-    list<Bonus*>::iterator bns;
+    vector<Bonus*>::iterator bns;
 
     for (bns = m_bonuses.begin(); bns != m_bonuses.end();)
     {
@@ -143,15 +140,14 @@ void CollisionManager::PlatformCollision()
         {
             bns++;
         }
-
     }
 }
 
 //-------------------------------------------------------------------Intersect Bullets with top and with blocks
 void CollisionManager::BulletsCollision()
 {
-    std::list<Bullets*>::iterator blts;
-    std::list<Block*>::iterator blk;
+    std::vector<Bullets*>::iterator blts;
+    std::vector<Block*>::iterator blk;
 
     for (blts = m_bullets.begin(); blts != m_bullets.end();)
     {
@@ -162,7 +158,6 @@ void CollisionManager::BulletsCollision()
             blts = m_bullets.erase(blts);
             continue;
         }
-
 
         for (blk = m_blocks.begin(); blk != m_blocks.end();)
         {
@@ -181,11 +176,9 @@ void CollisionManager::BulletsCollision()
                 blk++;
             }
         }
-
         if (!m_bullets.empty() && blts != m_bullets.end())
         {
             blts++;
         }
-
     }
 }

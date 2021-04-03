@@ -9,8 +9,6 @@
 #include "MusicAndSounds.h"
 #include "EventHandler.h"
 
-
-
 void EventHandler::CollisionBallWithLeftWall(Ball& ball)
 {
 	ball.CollisionWithLeftWall();
@@ -43,7 +41,6 @@ void EventHandler::CollisionBallWithPlatform(Ball& ball, ConcretePlatform* platf
             ball.SetFlagBallCatchPosition(true);
             ball.DecreaseCatchCounter();
         }
-
         ball.setPosition(platform->GetInstance()->GetRect().left + ball.GetCatchPositionX(), platform->GetInstance()->GetRect().top - BLUE_BALL_HEIGHT + 1);
     }
     else
@@ -58,7 +55,7 @@ void EventHandler::CollisionBallWithPlatform(Ball& ball, ConcretePlatform* platf
     }
 }
 
-void EventHandler::CollisionBallWithBlock(Ball& ball, Block& block, std::list<Bonus*>& bonuses)
+void EventHandler::CollisionBallWithBlock(Ball& ball, Block& block, std::vector<Bonus*>& bonuses)
 {
     Menu::GetInstance().SetCountScore(10 * Menu::GetInstance().GetCombo());
     Menu::GetInstance().IncreaseCombo();
@@ -86,7 +83,7 @@ void EventHandler::CollisionBallWithBottom(Ball& ball, ConcretePlatform* platfor
     platform->ChangePlatform(mediumPlatform);
 }
 
-void EventHandler::CollisionPlatformWithBonus(ConcretePlatform* platform, Bonus& bonus, std::list<Ball*>& balls)
+void EventHandler::CollisionPlatformWithBonus(ConcretePlatform* platform, Bonus& bonus, std::vector<Ball*>& balls)
 {
     MusicAndSounds::GetInstance().PlatformCollBonusPlay();
     bonus.CollisionWithPlatform(platform, balls);   
@@ -97,7 +94,7 @@ void EventHandler::CollisionBulletsWithTop(Bullets& bullet)
     MusicAndSounds::GetInstance().BulletsHitBorderMapPlay();
 }
 
-void EventHandler::CollisionBulletsWithBlock(Bullets& bullet, Block& block, std::list<Bonus*>& bonuses)
+void EventHandler::CollisionBulletsWithBlock(Bullets& bullet, Block& block, std::vector<Bonus*>& bonuses)
 {
     MusicAndSounds::GetInstance().BulletsHitBlockPlay();
     if (block.GetFlagBonus())

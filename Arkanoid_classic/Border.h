@@ -1,40 +1,18 @@
 
+#ifndef BORDER_H_
+#define BORDER_H_
 
-#ifndef _BORDER_H
-#define _BORDER_H
-
-
-
+class Block;
 class Border
 {
-private:
-	Image image;
-	Texture texture; 	//тайлы границ (углы и стены)
-	Sprite _verticalLeftWall;
-	Sprite _verticalRightWall;
-	Sprite _horizontalTopWall;
-	Sprite _horizontalBottomWall;
-	Sprite _leftTopCorner;
-	Sprite _leftBottomCorner;
-	Sprite _rightTopCorner;
-	Sprite _rightBottomCorner;
-
-	
-	
-
-
 public:
-	//конструторы
 	Border();
 	Border(const Border&) = delete;
-
 	~Border() {}
-
-	//переопределенные операторы
+		
 	Border operator=(const Border&) const = delete;
-	Border operator+(const Border& gmbj) const = delete;
-
-	//Методы получения картинок стенок карты
+	Border operator+(const Border&) const = delete;
+		
 	Sprite GetLeftTopCorner(int posX, int posY);
 	Sprite GetLeftBottomCorner(int posX, int posY);
 	Sprite GetRightTopCorner(int posX, int posY);
@@ -47,7 +25,19 @@ public:
 	void CreateMap(RenderWindow& window);
 	void CreateMenu(RenderWindow& window);
 
+private:
+	Image m_image;
+	Texture m_texture;
 
+	//tiles corners and walls
+	Sprite m_vertical_left_wall;
+	Sprite m_vertical_right_wall;
+	Sprite m_horizontal_top_wall;
+	Sprite m_horizontal_bottom_wall;
+	Sprite m_left_top_corner;
+	Sprite m_left_bottom_corner;
+	Sprite m_right_top_corner;
+	Sprite m_right_bottom_corner;
 };
 
 #endif

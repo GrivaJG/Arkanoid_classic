@@ -1,41 +1,35 @@
-#pragma once
 
+#ifndef BLOCK_H_
+#define BLOCK_H_
 
-#include "Config.h"
 #include "GameObject.h"
-#include "Ball.h"
 
-
+class Ball;
 class Block : public GameObject
 {
-private:
-	
-	
-
-	int _strength = 0;    // Количество попаданий в блок до разрушения 
-	
-	bool _flagBonus = false;  // Если true то при попадании из блока выпадает бонус
-	BlockType _blockType; // Цвет блока отвечает за подгуженную текстуру и тип бонуса который из нее может выпасть
-
-
-	Vector2f BallCollisionLeftTopCorner(Ball& ball);		// Столкновение с левым верхним углом
-	Vector2f BallCollisionRightTopCorner(Ball& ball);		// Столкновение с правым верхним углом
-	Vector2f BallCollisionLeftBottomCorner(Ball& ball);	// Столкновение с левым нижним углом
-	Vector2f BallCollisionRightBottomCorner(Ball& ball);	// Столкновение с правым нижним углом
-	Vector2f BallCollisionLeftWall(Ball& ball);			// Столкновение с левой стенкой
-	Vector2f BallCollisionBottomWall(Ball& ball);			// Столкновение с низом
-	Vector2f BallCollisionTopWall(Ball& ball);			// Столкновение с верхом
-	Vector2f BallCollisionRightWall(Ball& ball);			// Столкновение с правой стенкой
-
 public:
-	Block(Image& img, BlockType blockType = NO_BONUS, bool bonus = false );
+	Block(Image& img, BlockType blockType = NO_BONUS, bool bonus = false);
 	~Block() { }
-
 
 	Vector2f BallCollision(Ball& ball);
 
-	BlockType GetBlockType() { return _blockType; }
-	bool GetFlagBonus() { return _flagBonus; }	
+	BlockType GetBlockType() { return m_block_type; }
+	bool GetFlagBonus() { return m_flag_bonus; }
 
+private:
+	int m_strength = 0;			// Kolichestvo popadaniy v block do razrusheniya 
+	
+	bool m_flag_bonus = false;	// Esli True to posle razrusheniya blocka iz nego vipadaet bonus
+	BlockType m_block_type;		// Color blocka otvechaet za podgruzhennuu texture and type bonusa kotoriy iz nee moget vipast
+
+	Vector2f BallCollisionLeftTopCorner(Ball& ball);		// Collision with left top corner
+	Vector2f BallCollisionRightTopCorner(Ball& ball);		// Collision with right top corner
+	Vector2f BallCollisionLeftBottomCorner(Ball& ball);	    // Collision with left bottom corner
+	Vector2f BallCollisionRightBottomCorner(Ball& ball);	// Collision with right bottom corner
+	Vector2f BallCollisionLeftWall(Ball& ball);				// Collision with left wall
+	Vector2f BallCollisionBottomWall(Ball& ball);			// Collision with bottom wall
+	Vector2f BallCollisionTopWall(Ball& ball);				// Collision with top wall
+	Vector2f BallCollisionRightWall(Ball& ball);			// Collision with right wall
 };
 
+#endif

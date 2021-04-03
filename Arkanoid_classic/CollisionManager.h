@@ -3,24 +3,17 @@
 #ifndef COLLISION_MANAGER_H_
 #define COLLISION_MANAGER_H_
 
-#include "Bullets.h"
-#include "Platform.h"
-#include "Ball.h"
-#include "Block.h"
-#include "Bonus.h"
-#include "MusicAndSounds.h"
-#include "EventHandler.h"
 #include "Event.h"
+#include "EventHandler.h"
 
-using std::list;
-
+using std::vector;
 
 class CollisionManager
 {
     
 public:
-    CollisionManager(ConcretePlatform* platform, std::list<Ball*>& ball, std::list<Block*>& block, std::list<Bonus*>& bonus,
-        std::list<Bullets*>& bullets);
+    CollisionManager(ConcretePlatform* platform, std::vector<Ball*>& ball, std::vector<Block*>& block, std::vector<Bonus*>& bonus,
+        std::vector<Bullets*>& bullets);
     ~CollisionManager();
 
     void CollisionDetecter();
@@ -28,16 +21,15 @@ public:
 private:
 
     ConcretePlatform* m_platform;    
-    std::list<Ball*>& m_balls;
-    std::list<Block*>& m_blocks;
-    std::list<Bonus*>& m_bonuses;
-    std::list<Bullets*>& m_bullets;
+    std::vector<Ball*>& m_balls;
+    std::vector<Block*>& m_blocks;
+    std::vector<Bonus*>& m_bonuses;
+    std::vector<Bullets*>& m_bullets;
 
     void BallCollision();
     void PlatformCollision();
     void BulletsCollision();
-
-    //EventHandler
+   
     EventHandler event_handler;
 
     //Events With Ball
@@ -45,16 +37,14 @@ private:
     TEvent<class Ball&> CollisionBallWithRightWall;
     TEvent<class Ball&> CollisionBallWithTop;
     TEvent<class Ball&, ConcretePlatform*> CollisionBallWithBottom;
-    TEvent<class Ball&, Block&, std::list<Bonus*>&> CollisionBallWithBlock;
+    TEvent<class Ball&, Block&, std::vector<Bonus*>&> CollisionBallWithBlock;
     TEvent<class Ball&, ConcretePlatform*> CollisionBallWithPlatform;
     
     // Other Events
-    TEvent<class ConcretePlatform*, class Bonus&, std::list<class Ball*>&> CollisionPlatformWithBonus;
+    TEvent<class ConcretePlatform*, class Bonus&, std::vector<class Ball*>&> CollisionPlatformWithBonus;
     TEvent<class Bullets&> CollisionBulletsWithTop;
-    TEvent<class Bullets&, class Block&, std::list<class Bonus*>&> CollisionBulletsWithBlock;
+    TEvent<class Bullets&, class Block&, std::vector<class Bonus*>&> CollisionBulletsWithBlock;
     
 };
-
-
 
 #endif // !COLLISION_MANAGER_H_

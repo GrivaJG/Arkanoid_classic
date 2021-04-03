@@ -1,13 +1,15 @@
 
+#include "Config.h"
+#include "Menu.h"
+
 #include "Bonus.h"
 
-
-Bonus::Bonus(Image& img, BlockType blockType, Vector2f startPosition) : GameObject(img), _bonusType(blockType)
+Bonus::Bonus(Image& img, BlockType block_type, Vector2f start_position) : GameObject(img), m_bonus_type(block_type)
 {
-    this->setTexture(_texture);
-    this->setPosition(startPosition);
+    this->setTexture(m_texture);
+    this->setPosition(start_position);
    
-    switch (_bonusType)
+    switch (m_bonus_type)
     {
     case BLUE:
         this->setTextureRect(sf::IntRect(BLUE_BONUS_LEFT, BLUE_BONUS_TOP, BONUS_WIDTH, BONUS_HEIGHT));
@@ -28,38 +30,38 @@ Bonus::Bonus(Image& img, BlockType blockType, Vector2f startPosition) : GameObje
         this->setTextureRect(sf::IntRect(YELLOW_BONUS_LEFT, YELLOW_BONUS_TOP, BONUS_WIDTH, BONUS_HEIGHT));
         break;
     default:
-        throw ("invalid argument bonusType");
+        throw ("invalid argument bonus_type");
         break;
     }
 }
 
 void Bonus::Move(float time)
 {
-    this->move(0, _speedFall * time);
+    this->move(0, m_speed_fall * time);
 }
 
-void Bonus::CollisionWithPlatform(ConcretePlatform* platform, std::list<Ball*>& ball)
+void Bonus::CollisionWithPlatform(ConcretePlatform* platform, std::vector<Ball*>& ball)
 {
-    switch (_bonusType)
+    switch (m_bonus_type)
     {
     case BLUE:
-        ChangePlatform(platform); // Увеличиваем или уменьшаем платформу
+        ChangePlatform(platform); // Random uvelichivaem ili umenshaem platformu
         break;
     case RED:
-        LaserOnBoard(platform);  // Устанавливаем лазер на платформу
+        LaserOnBoard(platform);   // Add 10 bullets
         break;
         
     case PURPLE:
-        MultipleBall(ball); // Из каждого шарика в игре вылетает еще два шарика
+        MultipleBall(ball);       // Iz kazhdogo sharika v igre viletaet eshe dva sharika
         break;
     case PINK:
-        ChangeSpeedBall(ball); // Ускоряем или замедляем шарик(и)
+        ChangeSpeedBall(ball);    // Uskoryaem ili zamedlyaem sharik(i)
         break;
     case GREEN:
-        CatchBall(ball);    // Если шарик на экране остался один, он приклеивается к платформе
+        CatchBall(ball);          // Esly sharik na ecrane ostalsya odin on prikleevaetsya k platforme
         break;
     case YELLOW:
-        AddLive();		// Этот бонус добавляет одну жизнь игроку
+        AddLive();		          // add 1 lives
         break;
     default:
         throw("invalid _bonusType");
@@ -67,110 +69,99 @@ void Bonus::CollisionWithPlatform(ConcretePlatform* platform, std::list<Ball*>& 
     }
 }
 
- 
- 
-
-
-
-
-
-void Bonus::MultipleBall(std::list<Ball*>& ball)
+void Bonus::MultipleBall(std::vector<Ball*>& ball)
 {
-    std::list<Ball*>::iterator bl;
-    std::list<Ball*> ballTemp;
-    std::list<Ball*>::iterator blTmp;
+    std::vector<Ball*>::iterator bl;
+    std::vector<Ball*> ball_temp;
+    std::vector<Ball*>::iterator bl_tmp;
 
-    Vector2f angleUnitCircleTemp;
+    Vector2f angle_unit_circle_temp;
 
-    blTmp = ballTemp.begin();
+    bl_tmp = ball_temp.begin();
     
     for (bl = ball.begin(); bl != ball.end(); bl++)
     {        
-        Ball* temp1 = new Ball(this->_image, (*bl)->GetSpeed(), false);
-        Ball* temp2 = new Ball(this->_image, (*bl)->GetSpeed(), false);
+        Ball* temp1 = new Ball(this->m_image, (*bl)->GetSpeed(), false);
+        Ball* temp2 = new Ball(this->m_image, (*bl)->GetSpeed(), false);
 
         temp1->setPosition((*bl)->getPosition());
         temp2->setPosition((*bl)->getPosition());
 
         if ((*bl)->GetAngleUnitCircle().x > 0.75)
         {
-            angleUnitCircleTemp.y = (*bl)->GetAngleUnitCircle().y + 0.2;
-            angleUnitCircleTemp.x = sqrt(1 - pow(angleUnitCircleTemp.y, 2));
+            angle_unit_circle_temp.y = (*bl)->GetAngleUnitCircle().y + 0.2;
+            angle_unit_circle_temp.x = sqrt(1 - pow(angle_unit_circle_temp.y, 2));
 
             if ((*bl)->GetAngleUnitCircle().x < 0)
             {
-                angleUnitCircleTemp.x = -abs(angleUnitCircleTemp.x);
+                angle_unit_circle_temp.x = -abs(angle_unit_circle_temp.x);
             }
             else
             {
-                angleUnitCircleTemp.x = abs(angleUnitCircleTemp.x);
+                angle_unit_circle_temp.x = abs(angle_unit_circle_temp.x);
             }
         }
         else
         {
-            angleUnitCircleTemp.x = (*bl)->GetAngleUnitCircle().x + 0.2;
-            angleUnitCircleTemp.y = sqrt(1 - pow(angleUnitCircleTemp.x, 2));
+            angle_unit_circle_temp.x = (*bl)->GetAngleUnitCircle().x + 0.2;
+            angle_unit_circle_temp.y = sqrt(1 - pow(angle_unit_circle_temp.x, 2));
 
             if ((*bl)->GetAngleUnitCircle().y < 0)
             {
-                angleUnitCircleTemp.y = -abs(angleUnitCircleTemp.y);
+                angle_unit_circle_temp.y = -abs(angle_unit_circle_temp.y);
             }
             else
             {
-                angleUnitCircleTemp.y = abs(angleUnitCircleTemp.y);
+                angle_unit_circle_temp.y = abs(angle_unit_circle_temp.y);
             }
 
             
         }
                
-        temp1->SetAngleUnitCircle(angleUnitCircleTemp);
+        temp1->SetAngleUnitCircle(angle_unit_circle_temp);
 
-        ballTemp.push_back(temp1);
+        ball_temp.push_back(temp1);
 
         if ((*bl)->GetAngleUnitCircle().x < -0.75)
         {
-            angleUnitCircleTemp.y = (*bl)->GetAngleUnitCircle().y - 0.2;
-            angleUnitCircleTemp.x = sqrt(1 - pow(angleUnitCircleTemp.y, 2));
+            angle_unit_circle_temp.y = (*bl)->GetAngleUnitCircle().y - 0.2;
+            angle_unit_circle_temp.x = sqrt(1 - pow(angle_unit_circle_temp.y, 2));
 
             if ((*bl)->GetAngleUnitCircle().x < 0)
             {
-                angleUnitCircleTemp.x = -abs(angleUnitCircleTemp.x);
+                angle_unit_circle_temp.x = -abs(angle_unit_circle_temp.x);
             }
             else
             {
-                angleUnitCircleTemp.x = abs(angleUnitCircleTemp.x);
+                angle_unit_circle_temp.x = abs(angle_unit_circle_temp.x);
             }
         }
         else
         {
-            angleUnitCircleTemp.x = (*bl)->GetAngleUnitCircle().x - 0.2;
-            angleUnitCircleTemp.y = sqrt(1 - pow(angleUnitCircleTemp.x, 2));
+            angle_unit_circle_temp.x = (*bl)->GetAngleUnitCircle().x - 0.2;
+            angle_unit_circle_temp.y = sqrt(1 - pow(angle_unit_circle_temp.x, 2));
 
             if ((*bl)->GetAngleUnitCircle().y < 0)
             {
-                angleUnitCircleTemp.y = -abs(angleUnitCircleTemp.y);
+                angle_unit_circle_temp.y = -abs(angle_unit_circle_temp.y);
             }
             else
             {
-                angleUnitCircleTemp.y = abs(angleUnitCircleTemp.y);
+                angle_unit_circle_temp.y = abs(angle_unit_circle_temp.y);
             }
         }
-
         
-        temp2->SetAngleUnitCircle(angleUnitCircleTemp);
+        temp2->SetAngleUnitCircle(angle_unit_circle_temp);
 
-        ballTemp.push_back(temp2);       
-    }
+        ball_temp.push_back(temp2);       
+    }    
 
-    
-
-    for (blTmp = ballTemp.begin(); blTmp != ballTemp.end();)
+    for (bl_tmp = ball_temp.begin(); bl_tmp != ball_temp.end();)
     {        
-        ball.push_back((*blTmp));
-        blTmp = ballTemp.erase(blTmp);
+        ball.push_back((*bl_tmp));
+        bl_tmp = ball_temp.erase(bl_tmp);
     }
 }
-
 
 void Bonus::ChangePlatform(ConcretePlatform* platform)
 {
@@ -196,11 +187,11 @@ void Bonus::LaserOnBoard(ConcretePlatform* platform)
     platform->GetInstance()->SetBullets();
 }
 
-void Bonus::ChangeSpeedBall(std::list<Ball*>& ball)
+void Bonus::ChangeSpeedBall(std::vector<Ball*>& ball)
 {
     std::random_device rd;
     std::mt19937 mersenne(rd());
-    std::list<Ball*>::iterator it;
+    std::vector<Ball*>::iterator it;
     it = ball.begin();
     int rand = mersenne() % 2;
     for (it = ball.begin(); it != ball.end(); it++)
@@ -213,13 +204,12 @@ void Bonus::ChangeSpeedBall(std::list<Ball*>& ball)
         {
             (*it)->SetSpeedFast();
         }
-    }
-    
+    }    
 }
 
-void Bonus::CatchBall(std::list<Ball*>& ball)
+void Bonus::CatchBall(std::vector<Ball*>& ball)
 {    
-    std::list<Ball*>::iterator bl;
+    std::vector<Ball*>::iterator bl;
     
     for (bl = ball.begin(); bl != ball.end(); bl++)
     {

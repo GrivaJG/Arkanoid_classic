@@ -3,18 +3,16 @@
 #define _BULLETS_H
 
 #include "GameObject.h"
-#include "Config.h"
 
 class Bullets : public GameObject
 {
-	float _acceleration;
-
-
 public:
 	Bullets(Image& img, float acceleration = -0.7);
 	~Bullets() {}
 
 	void Move(float time);
-};
 
+private:
+	float m_acceleration;
+};
 #endif // !_BULLETS_H

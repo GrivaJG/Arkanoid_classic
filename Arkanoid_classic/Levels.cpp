@@ -6,7 +6,7 @@
 #include "Block.h"
 #include "Levels.h"
 
-void Levels::InitLevel(int lvl, std::list<Block*>& blocks)
+void Levels::InitLevel(int lvl, std::vector<Block*>& blocks)
 {
     std::ifstream file("Config/lvlCreator.ini");
     if (file.is_open())
@@ -155,9 +155,9 @@ void Levels::InitLevel(int lvl, std::list<Block*>& blocks)
     file.close();    
 }
 
-int Levels::BlockSetPosition(int startPositionTop, int startPositionLeft, int positionX, int positionY, std::list<Block*>& blocks)
+int Levels::BlockSetPosition(int startPositionTop, int startPositionLeft, int positionX, int positionY, std::vector<Block*>& blocks)
 {
-    std::list<Block*>::iterator blk;
+    std::vector<Block*>::iterator blk;
     blk = blocks.end();
     blk--;
     (*blk)->setPosition(startPositionLeft + positionX * (BLOCK_WIDTH + 1), startPositionTop + positionY * (BLOCK_HEIGHT + 1));

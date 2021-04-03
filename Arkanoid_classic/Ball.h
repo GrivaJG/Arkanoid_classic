@@ -6,70 +6,61 @@
 
 class Ball : public GameObject
 {
-private:
-	static unsigned _ballCounter;
-	Vector2f _angleUnitCircle;   // Вектор направления полета шарика
-	Vector2f _speed;			 // Вектор скорости
-	
-	float _acceleration;		 // Коээфициент ускорения
-
-	bool _flagInit;				 // Инициализация направления при запуске шарика с платформы (начало игры)
-	
-	bool _flagCatch;
-	bool _flagBallCatchPosition;
-	float _catchPositionX;
-	unsigned _catchCounter;
-	
-
-	
 public:
-	Ball(Image& img, float acceleration = 0.3, bool flagInit = true);
-	~Ball() { _ballCounter--; }
+	Ball(Image& img, float acceleration = 0.3, bool flag_init = true);
+	~Ball() { m_ball_counter--; }
 
 
-	//Методы
-	void Move(double angleUnitCircleX, double angleUnityCircleY, float time);
+	//Methods
+	void Move(double angle_unit_circleX, double angle_unity_circleY, float time);
 
-	void SetSpeedFast();  
-	void SetSpeedSlow();  
-	
-	void ResetSpeed(); 
-	float GetSpeed() { return _acceleration; }
+	void SetSpeedFast();
+	void SetSpeedSlow();
+
+	void ResetSpeed();
+	float GetSpeed() { return m_acceleration; }
 
 
-	void SetFlagInit(bool flagInit) { _flagInit = flagInit; }
-	bool GetFlagInit() { return _flagInit; }
+	// Properties
+	void SetFlagInit(bool flagInit) { m_flag_init = flagInit; }
+	bool GetFlagInit() { return m_flag_init; }
 
-	void SetAngleUnitCircle(Vector2f angleUnitCircle) { _angleUnitCircle = angleUnitCircle; }
-	Vector2f GetAngleUnitCircle() { return _angleUnitCircle; }
+	void SetAngleUnitCircle(Vector2f angle_unit_circle) { m_angle_unit_circle = angle_unit_circle; }
+	Vector2f GetAngleUnitCircle() { return m_angle_unit_circle; }
 
-	void SetFlagCatch(bool flag) { _flagCatch = flag; }
-	bool GetFlagCatch() { return _flagCatch; }
+	void SetFlagCatch(bool flag) { m_flag_catch = flag; }
+	bool GetFlagCatch() { return m_flag_catch; }
 
-	void SetFlagBallCatchPosition(bool flag) { _flagBallCatchPosition = flag; }
-	bool GetFlagBallCatchPosition() { return _flagBallCatchPosition; }
+	void SetFlagBallCatchPosition(bool flag) { m_flag_ball_catch_position = flag; }
+	bool GetFlagBallCatchPosition() { return m_flag_ball_catch_position; }
 
-	void SetCatchPositionX(float catchPositionX) { _catchPositionX = catchPositionX; }
-	float GetCatchPositionX() { return _catchPositionX; }
+	void SetCatchPositionX(float catch_positionX) { m_catch_positionX = catch_positionX; }
+	float GetCatchPositionX() { return m_catch_positionX; }
 
-	void SetCatchCounter() { _catchCounter += 10; }
-	void ResetCatch() { _catchCounter = 0; _flagBallCatchPosition = false; _flagCatch = false; }
-	void DecreaseCatchCounter() { _catchCounter--; }
-	unsigned GetCatchCounter() { return _catchCounter; }
-	
-	static unsigned GetBallCount() { return _ballCounter; }
+	void SetCatchCounter() { m_catch_counter += 10; }
+	void ResetCatch() { m_catch_counter = 0; m_flag_ball_catch_position = false; m_flag_catch = false; }
+	void DecreaseCatchCounter() { m_catch_counter--; }
+	uint32_t GetCatchCounter() { return m_catch_counter; }
+
+	static uint32_t GetBallCount() { return m_ball_counter; }
 
 	void CollisionWithLeftWall();
 	void CollisionWithRightWall();
 	void CollisionWithTop();
+
+private:
+	static uint16_t m_ball_counter;  // Kolichestvo sozdannih sharov
+	Vector2f m_angle_unit_circle;    // Vector napravleniya poleta sharika
+	Vector2f m_speed;			     // SpeedVector
 	
+	float m_acceleration;		     // Acceleration factor
 
-
-
+	bool m_flag_init;			     // Ball init for first flight
 	
-
+	bool m_flag_catch;			     // Ball catch to the platform
+	bool m_flag_ball_catch_position; 
+	float m_catch_positionX;	     // Position in platform when ball catch
+	uint32_t m_catch_counter;        // Kolichestvo prilipaniy k platforme, kogda m_catch_counter == 0 sharik perestaet prilipat k platforme
 };
-
-
 
 #endif // _BALL_H

@@ -1,17 +1,18 @@
 
 #include "Config.h"
+#include "Ball.h"
+
 #include "Block.h"
 
-
-Block::Block(Image& img, BlockType blockType, bool flagBonus) : GameObject(img)
+Block::Block(Image& img, BlockType block_type, bool flag_bonus) : GameObject(img)
 {
-    _flagBonus = flagBonus;
-    _blockType = blockType;
-    this->setTexture(_texture);
+    m_flag_bonus = flag_bonus;
+    m_block_type = block_type;
+    this->setTexture(m_texture);
 
-    if (_flagBonus)
+    if (m_flag_bonus)
     {
-        switch (_blockType)
+        switch (m_block_type)
         {
         case BLUE:
             this->setTextureRect(sf::IntRect(BLUE_BONUS_BLOCK_LEFT, BLUE_BONUS_BLOCK_TOP, BLOCK_WIDTH, BLOCK_HEIGHT));
@@ -35,13 +36,13 @@ Block::Block(Image& img, BlockType blockType, bool flagBonus) : GameObject(img)
             this->setTextureRect(sf::IntRect(YELLOW_BONUS_BLOCK_LEFT, YELLOW_BONUS_BLOCK_TOP, BLOCK_WIDTH, BLOCK_HEIGHT));
             break;
         default:
-            throw ("invalid argument blockType");
+            throw ("invalid argument block_type");
             break;
         }
     }
     else
     {
-        switch (_blockType)
+        switch (m_block_type)
         {
         case BLUE:
             this->setTextureRect(sf::IntRect(BLUE_BLOCK_LEFT, BLUE_BLOCK_TOP, BLOCK_WIDTH, BLOCK_HEIGHT));
@@ -69,258 +70,234 @@ Block::Block(Image& img, BlockType blockType, bool flagBonus) : GameObject(img)
             break;
         }
     }
-
-
-
-    
-    
 }
 
 Vector2f Block::BallCollision(Ball& ball)
 {
-    float ballLeftX = ball.GetRect().left;                                        // Левый край шарика
-    float ballRightX = ball.GetRect().left + ball.GetRect().width;                // Правый край ширка
-    float ballTopY = ball.GetRect().top;                                          // Верх шарика
-    float ballBottomY = ball.GetRect().top + ball.GetRect().height;               // Низ шарика
-    float ballCenterX = ball.GetRect().left + (ball.GetRect().width / 2);         // Координаты центра шарика по х
-    float ballCenterY = ball.GetRect().top + (ball.GetRect().height / 2);         // Координаты центра шарика по y
+    float ball_leftX = ball.GetRect().left;                                        // Left edge ball
+    float ball_rightX = ball.GetRect().left + ball.GetRect().width;                // Right edge ball
+    float ball_topY = ball.GetRect().top;                                          // Top ball
+    float ball_bottomY = ball.GetRect().top + ball.GetRect().height;               // Bottom ball
+    float ball_centerX = ball.GetRect().left + (ball.GetRect().width / 2);         // Coord center ball X
+    float ball_centerY = ball.GetRect().top + (ball.GetRect().height / 2);         // Coord center ball Y
 
-    float blockBottomY = this->GetRect().top + this->GetRect().height;             // Низ блока
-    float blockTopY = this->GetRect().top;                                         // Верх блока
-    float blockLeftX = this->GetRect().left;                                       // левый край блока
-    float blockRightX = this->GetRect().left + this->GetRect().width;              // правый край блока
+    float block_bottomY = this->GetRect().top + this->GetRect().height;             // Bottom block
+    float block_topY = this->GetRect().top;                                         // Top block
+    float block_leftX = this->GetRect().left;                                       // Left edge block
+    float block_rightX = this->GetRect().left + this->GetRect().width;              // Right edge block
     
 
 
-    // Столкновение с левым нижним углом
-    if (ballCenterX < blockLeftX && ballCenterY > blockBottomY)                     // По х - центр шарика находится левее чем левый край блока,
-    {                                                                               // а по y - центр шарика находится ниже чем низ блока              
+    // Collision with left bottom corner
+    if (ball_centerX < block_leftX && ball_centerY > block_bottomY)                     // Po X - center sharika nahoditsya levee chem left edge blocka
+    {                                                                               // Po Y - center sharika nahoditsya nige chem bottom blocka              
         return BallCollisionLeftBottomCorner(ball);
     }    
-    // Столкновение с левым верхним углом
-    else if (ballCenterX < blockLeftX && ballCenterY < blockTopY)                   // По х - центр шарика находится левее чем левый край блока                                                             
-    {                                                                               // По y - центр шарика находится выше чем верх блока         
+    // Collision with left top corner
+    else if (ball_centerX < block_leftX && ball_centerY < block_topY)                   // Po X - center sharika nahoditsya levee chem left edge blocka                                                         
+    {                                                                               // Po Y - center sharika nahoditsya vishe chem bottom blocka       
         return BallCollisionLeftTopCorner(ball);
     }
 
-    // Столкновение с правм верхним углом
-    else if (ballCenterX > blockRightX && ballCenterY < blockTopY)                 // По х - центр шарика находится правее чем правый край блкоа                         
-    {                                                                              // По y - центр шарика находится выше чем верх блока               
+    // Collision with right top corner
+    else if (ball_centerX > block_rightX && ball_centerY < block_topY)                 // Po X - center sharika nahoditsya pravee chem praviy edge blocka                           
+    {                                                                              // Po Y - center sharika nahoditsya vishe chem bottom blocka       
         return BallCollisionRightTopCorner(ball);
     }
 
-    // Столкновение с парвым нижним углом
-    else if (ballCenterX > blockRightX && ballCenterY > blockBottomY)                // По х - центр находится правее чем правый край блока        
-    {                                                                                // По у - центр находится ниже чем низ блока         
+    // Collition with right bottom corner
+    else if (ball_centerX > block_rightX && ball_centerY > block_bottomY)                // Po X - center sharika nahoditsya pravee chem praviy edge blocka      
+    {                                                                                // Po Y - center sharika nahoditsya nige chem bottom blocka        
         return BallCollisionRightBottomCorner(ball);
     }
 
-    // Столкновение с низом
-    else if (ballCenterX > blockLeftX && ballCenterX < blockRightX                   // Если по х находимся в диапазоне блока
-        && ballBottomY > blockBottomY)                                               // И по y находимся ниже нижнего края
+    // Collision with bottom
+    else if (ball_centerX > block_leftX && ball_centerX < block_rightX                   // If po X nahodimsya v diapazone bolcka
+        && ball_bottomY > block_bottomY)                                               // A po Y nahodimsa nige nignego kraya
     {        
         return BallCollisionBottomWall(ball);
     }
 
-    // Столкновение с верхом
-    else if (ballCenterX > blockLeftX && ballCenterX < blockRightX                       // Если по х находимся в диапазоне блока
-        && ballTopY < blockTopY)                                                         // И по y находимся выше верхнего края края
+    // Collision with top
+    else if (ball_centerX > block_leftX && ball_centerX < block_rightX                       // If po X nahodimsya v diapazone bolcka
+        && ball_topY < block_topY)                                                         // A po Y nahodimsa vishe verhnego kraya
     {        
         return BallCollisionTopWall(ball);
     }
 
-    // Если находимся с левоой стороны
-    else if (ballCenterY > blockTopY && ballCenterY < blockBottomY                      // Если по y находимся в диапазоне платформы
-        && ballLeftX < blockLeftX)                                                      // И по х находимся слева
+    // Collision with left wall
+    else if (ball_centerY > block_topY && ball_centerY < block_bottomY                      // If po Y nahodimsya v diapazone bolcka
+        && ball_leftX < block_leftX)                                                      // A po X nahodimsya sleva
     {        
         return BallCollisionLeftWall(ball);
     }
 
-    // Если находимся с правой стороны
-    else if (ballCenterY > blockTopY && ballCenterY < blockBottomY                      // Если по y находимся в диапазоне платформы
-        && ballRightX > blockRightX)                                                    // И по х находимся справа
+    // Collision with right wall
+    else if (ball_centerY > block_topY && ball_centerY < block_bottomY                      // If po Y nahodimsya v diapazone bolcka
+        && ball_rightX > block_rightX)                                                    // A po X nahodimsya sprava
     {        
         return BallCollisionRightWall(ball);
     }
     else
     {
-        return ball.GetAngleUnitCircle();                                                          // Неизвестная ситуация, шарик остановится.
+        return ball.GetAngleUnitCircle();                                               // inache nichego ne delaem
     }
 }
 
 
 Vector2f Block::BallCollisionRightBottomCorner(Ball& ball)
 {
-    // Если попали в этот угол то устанавливаемся в максимально возможное положение
     
-    Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
-    // Если приземлились на блок практически прямо
-    if (angleUnitCircle.x > -0.001 && angleUnitCircle.x < 0.001)
+    Vector2f angle_unit_circle = ball.GetAngleUnitCircle();
+    // If stolknovenie pod pryamim uglom to:
+    if (angle_unit_circle.x > -0.001 && angle_unit_circle.x < 0.001)
     {
         ball.setPosition(ball.getPosition().x, this->GetRect().top + this->GetRect().height);
-        angleUnitCircle.x = 0.9;                                   // Отлетаем налево
-        angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2));
+        angle_unit_circle.x = 0.9;                                   // Otletaem napravo
+        angle_unit_circle.y = sqrt(1 - pow(angle_unit_circle.x, 2));
     }
     else 
     {
-        if (angleUnitCircle.y < 0)
+        if (angle_unit_circle.y < 0)
         {
             ball.setPosition(ball.getPosition().x, this->GetRect().top + this->GetRect().height);
-            angleUnitCircle.y = -angleUnitCircle.y;                 // Отражаемся по y только вниз                    
+            angle_unit_circle.y = -angle_unit_circle.y;                 // Otragaemsya tolko po Y vniz
         }
         else
         {
             ball.setPosition(this->GetRect().left + this->GetRect().width, ball.getPosition().y);
-            angleUnitCircle.x = -angleUnitCircle.x;                 // Отражаемся только по х
+            angle_unit_circle.x = -angle_unit_circle.x;                 // Otragaemsya tolko po X
         }
         
     }  
-    
-
-    return angleUnitCircle;
+    return angle_unit_circle;
 }
 
 Vector2f Block::BallCollisionLeftBottomCorner(Ball& ball)
 {
-    // Если попали в этот угол то устанавливаемся в максимально возможное положение по 
     
+    Vector2f angle_unit_circle = ball.GetAngleUnitCircle();
 
-    Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
-
-    //Если приземлились на блок практически прямо
-    if (angleUnitCircle.x > -0.001 && angleUnitCircle.x < 0.001)
+    // If stolknovenie pod pryamim uglom to:
+    if (angle_unit_circle.x > -0.001 && angle_unit_circle.x < 0.001)
     {
         ball.setPosition(ball.getPosition().x, this->GetRect().top + this->GetRect().height);
-        angleUnitCircle.x = -0.9;                                   //отлетаем налево
-        angleUnitCircle.y = sqrt(1 - pow(angleUnitCircle.x, 2));
+        angle_unit_circle.x = -0.9;                                   //otletaem nalevo
+        angle_unit_circle.y = sqrt(1 - pow(angle_unit_circle.x, 2));
     }
     else
     {
-        if (angleUnitCircle.y < 0)
+        if (angle_unit_circle.y < 0)
         {
             ball.setPosition(ball.getPosition().x, this->GetRect().top + this->GetRect().height);
-            angleUnitCircle.y = -angleUnitCircle.y;                 // Отражаемся по y только вниз                    
+            angle_unit_circle.y = -angle_unit_circle.y;                 // Otrazhaemsya tolko po Y vniz 
         }
         else
         {
             ball.setPosition(this->GetRect().left - ball.GetRect().width, ball.getPosition().y);
-            angleUnitCircle.x = -angleUnitCircle.x;                 // Отражаемся только по х
+            angle_unit_circle.x = -angle_unit_circle.x;                 // Otrazhaemsya tolko po X
         }
-
     }   
-
-    return angleUnitCircle;
+    return angle_unit_circle;
 }
 
 Vector2f Block::BallCollisionRightTopCorner(Ball& ball)
-{
-    Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
+{    
+    Vector2f angle_unit_circle = ball.GetAngleUnitCircle();
 
-    //Если приземлились на блок практически прямо
-    if (angleUnitCircle.x > -0.001 && angleUnitCircle.x < 0.001)
-    {
-        // Если попали в этот угол то устанавливаемся в максимально возможное положение
+    // If stolknovenie pod pryamim uglom to:
+    if (angle_unit_circle.x > -0.001 && angle_unit_circle.x < 0.001)
+    {        
         ball.setPosition(ball.getPosition().x, this->GetRect().top - BLUE_BALL_HEIGHT);
-        angleUnitCircle.x = 0.9;                                   //отлетаем налево
-        angleUnitCircle.y = -1* sqrt(1 - pow(angleUnitCircle.x, 2));
+        angle_unit_circle.x = 0.9;                                   // Otletaem nalevo
+        angle_unit_circle.y = -1* sqrt(1 - pow(angle_unit_circle.x, 2));
     }
     else
     {
-        if (angleUnitCircle.y > 0)
+        if (angle_unit_circle.y > 0)
         {            
             ball.setPosition(ball.getPosition().x, this->GetRect().top - BLUE_BALL_HEIGHT);
-            angleUnitCircle.y = -angleUnitCircle.y;                 // Отражаемся по y                    
+            angle_unit_circle.y = -angle_unit_circle.y;                 // Otrazhaemsya po Y            
         }
         else
         {            
             ball.setPosition(this->GetRect().left + this->GetRect().width, ball.getPosition().y);
-            angleUnitCircle.x = -angleUnitCircle.x;                 // Отражаемся только по х
+            angle_unit_circle.x = -angle_unit_circle.x;                 // Otrazhaemsya po X
         }
 
     }   
 
-    return angleUnitCircle;
+    return angle_unit_circle;
 }
 
 Vector2f Block::BallCollisionLeftTopCorner(Ball& ball)
-{
-    
-    
-    Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
+{   
+    Vector2f angle_unit_circle = ball.GetAngleUnitCircle();
 
-    //Если приземлились на блок практически прямо
-    if (angleUnitCircle.x > -0.001 && angleUnitCircle.x < 0.001)
-    {
-        // Если попали в этот угол то устанавливаемся в максимально возможное положение
+    // If stolknovenie pod pryamim uglom to:
+    if (angle_unit_circle.x > -0.001 && angle_unit_circle.x < 0.001)
+    {   
         ball.setPosition(ball.getPosition().x, this->GetRect().top - BLUE_BALL_HEIGHT);
-        angleUnitCircle.x = -0.9;                                   //отлетаем налево
-        angleUnitCircle.y = -1 * sqrt(1 - pow(angleUnitCircle.x, 2));
+        angle_unit_circle.x = -0.9;                                   // Otletaem nalevo
+        angle_unit_circle.y = -1 * sqrt(1 - pow(angle_unit_circle.x, 2));
     }
     else
     {
-        if (angleUnitCircle.y > 0)
+        if (angle_unit_circle.y > 0)
         {
             ball.setPosition(ball.getPosition().x, this->GetRect().top - BLUE_BALL_HEIGHT);
-            angleUnitCircle.y = -angleUnitCircle.y;                 // Отражаемся по y только вниз                    
+            angle_unit_circle.y = -angle_unit_circle.y;                 // Otrazhaemsya po Y tolko vniz               
         }
         else
         {
             ball.setPosition(this->GetRect().left - ball.GetRect().width, ball.getPosition().y);
-            angleUnitCircle.x = -angleUnitCircle.x;                 // Отражаемся только по х
+            angle_unit_circle.x = -angle_unit_circle.x;                 // Otrazhaemsya tolko po X
         }
 
     }   
-
-    return angleUnitCircle;
+    return angle_unit_circle;
 }
 
 Vector2f Block::BallCollisionBottomWall(Ball& ball)
 {
-    // Если попали в это место то устанавливаемся в максимальное положение
     ball.setPosition(ball.getPosition().x, this->GetRect().top + BLOCK_HEIGHT);
    
-    Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
+    Vector2f angle_unit_circle = ball.GetAngleUnitCircle();
 
-    angleUnitCircle.y = abs(angleUnitCircle.y);                 //отражаемся по y только вниз                    
-      
+    angle_unit_circle.y = abs(angle_unit_circle.y);                 //Otrazhaemsya po Y tolko vniz      
 
-    return angleUnitCircle;
+    return angle_unit_circle;
 }
 
 Vector2f Block::BallCollisionTopWall(Ball& ball)
-{
-    // Если попали в это место то устанавливаемся в максимально возможное положение
+{    
     ball.setPosition(ball.getPosition().x, this->GetRect().top - BLUE_BALL_HEIGHT);
 
-    Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
+    Vector2f angle_unit_circle = ball.GetAngleUnitCircle();
 
-    angleUnitCircle.y = -1 * abs(angleUnitCircle.y);                 //отражаемся по y только вверх                    
+    angle_unit_circle.y = -1 * abs(angle_unit_circle.y);                 //Otrazhaemsya po Y tolko vverh
 
-    return angleUnitCircle;
+    return angle_unit_circle;
 }
 
 Vector2f Block::BallCollisionLeftWall(Ball& ball)
-{
-    // Если попали в этот угол то устанавливаемся в максимально возможное положение
+{   
     ball.setPosition(this->GetRect().left-BLUE_BALL_WIDTH, ball.getPosition().y);
 
-    Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
+    Vector2f angle_unit_circle = ball.GetAngleUnitCircle();
 
-    angleUnitCircle.x = -1 * abs(angleUnitCircle.x);                         //отражаемся по х
-    
-   
+    angle_unit_circle.x = -1 * abs(angle_unit_circle.x);                         // Otrazhaemsya po X
 
-    return angleUnitCircle;
+    return angle_unit_circle;
 }
 
 Vector2f Block::BallCollisionRightWall(Ball& ball)
-{    
-    // Если попали в это место то устанавливаемся в максимально возможное положение
+{       
     ball.setPosition(this->GetRect().left + BLOCK_WIDTH, ball.getPosition().y);
 
-    Vector2f angleUnitCircle = ball.GetAngleUnitCircle();
+    Vector2f angle_unit_circle = ball.GetAngleUnitCircle();
 
-    angleUnitCircle.x = -angleUnitCircle.x;                         //отражаемся по х
+    angle_unit_circle.x = -angle_unit_circle.x;                         // Otrazhaemsya po X
     
-    return angleUnitCircle;
+    return angle_unit_circle;
 }

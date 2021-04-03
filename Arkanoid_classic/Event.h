@@ -5,10 +5,8 @@
 
 //https://habr.com/ru/post/424593/ 
 
-
-
 #include <cassert>
-#include <list>
+#include <vector>
 
 template<class ...TParams>
 class AbstractEventHandler
@@ -39,7 +37,7 @@ template<class ...TParams>
 class TEvent
 {
 	using TEventHandler = AbstractEventHandler<TParams...>;
-	using TEventHandlerIt = typename std::list<TEventHandler*>::const_iterator;
+	using TEventHandlerIt = typename std::vector<TEventHandler*>::const_iterator;
 
 public:
 	TEvent() : m_handlers() { }
@@ -80,9 +78,7 @@ public:
 			}
 			return false;
 		}
-
-	}
-	
+	}	
 
 private:	
 	inline TEventHandlerIt findEventHandler(TEventHandler& eventHandler) const
@@ -92,10 +88,8 @@ private:
 				return (*oneHandler == eventHandler);
 			});
 	}
-	std::list<TEventHandler*> m_handlers;
-	
+	std::vector<TEventHandler*> m_handlers;	
 };
-
 
 template<class TObject, class ...TParams>
 class MethodEventHandler : public AbstractEventHandler<TParams...>
