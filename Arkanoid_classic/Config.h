@@ -4,6 +4,8 @@
 
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <cstdlib>
 #include <vector>
 #include <random>				
 #include <sstream>

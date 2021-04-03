@@ -23,6 +23,8 @@ Game::Game() : m_levels(m_image), m_flag_ball_move(false), m_level(0)
     assert(m_collision_manager);
 
     GameObjectInit();   //Game object initialization    
+
+    GetTotalLevels();
 }
 
 void Game::StartGame()
@@ -36,7 +38,7 @@ void Game::StartGame()
     Menu::GetInstance().PlayerInit();                                   // Pered nachalom igri ustanavlivaem ochki i gizni v startovie znacheniya
 
     m_level++;
-    while (m_level <= 4 && window.isOpen())                             //Kostil
+    while (m_level <= m_total_levels && window.isOpen())                             //Kostil
     {
         window.clear();        
         GameObjectInit();                                               // Privodim vse igrovie elementi v startovoe pologenie
@@ -331,4 +333,25 @@ Game::~Game()
         delete* blts;
         blts = m_bullets.erase(blts);
     }
+}
+
+void Game::GetTotalLevels()
+{
+    std::ifstream file(LEVEL_CREATOR_PATH);
+    if (file.fail())
+    {
+        std::cout << "File lvl_creator is not found" << std::endl;
+        system("pause");
+        exit(-1);
+    }
+    std::string string_of_file;
+    std::getline(file, string_of_file);
+    std::stringstream pos;
+
+    for (size_t i = 14; i < string_of_file.length(); i++)
+        pos << string_of_file[i];
+    
+    pos >> m_total_levels;
+
+    file.close();   
 }

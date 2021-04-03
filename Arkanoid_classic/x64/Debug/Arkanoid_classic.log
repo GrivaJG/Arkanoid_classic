@@ -1,6 +1,9 @@
-﻿  Levels.cpp
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Config.h(229,37): warning C4305: инициализация: усечение из "double" в "float"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Config.h(230,33): warning C4305: инициализация: усечение из "double" в "float"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Levels.cpp(167,93): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Levels.cpp(167,43): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+﻿  Game.cpp
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Config.h(231,37): warning C4305: инициализация: усечение из "double" в "float"
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Config.h(232,33): warning C4305: инициализация: усечение из "double" в "float"
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Menu.h(8,32): warning C4081: требуется "newline"; обнаружен ";"
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.cpp(83,20): warning C4244: инициализация: преобразование "sf::Int64" в "float", возможна потеря данных
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.cpp(87,34): warning C4244: инициализация: преобразование "sf::Int32" в "float", возможна потеря данных
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.cpp(88,35): warning C4244: инициализация: преобразование "sf::Int32" в "float", возможна потеря данных
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Game.cpp(130,56): warning C4804: >: небезопасное использование типа "bool" в операции
   Arkanoid_classic.vcxproj -> F:\My_project\С++\Arkanoid\Arkanoid_classic\x64\Debug\Arkanoid_classic.exe

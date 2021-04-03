@@ -42,6 +42,7 @@ private:
     std::vector<class Bullets*> m_bullets;
 
     uint16_t m_level;                      // Current level number 
+    uint16_t m_total_levels;
     bool m_flag_ball_move;
 
     Levels m_levels;
@@ -50,6 +51,7 @@ private:
     
     uint8_t GameLoop(RenderWindow& window);   //Base game logic
     void GameObjectInit();
+    void GetTotalLevels();
 };
 
 #endif; //GAME_H_

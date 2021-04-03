@@ -1,7 +1,4 @@
 
-#include <fstream>
-#include <cstdlib>
-
 #include "Config.h"
 #include "Block.h"
 #include "Levels.h"
@@ -27,10 +24,10 @@ void Levels::InitLevel(int lvl, std::vector<Block*>& blocks)
         std::getline(file, stringOfFile);
         if (stringOfFile == levelForCreate)
         {
-            int positionX = 0;
-            int positionY = 0;
-            int startPositionTop = 0;
-            int startPositionLeft = 0;
+            int16_t positionX = 0;
+            int16_t positionY = 0;
+            int16_t startPositionTop = 0;
+            int16_t startPositionLeft = 0;
 
             std::getline(file, stringOfFile);
 
