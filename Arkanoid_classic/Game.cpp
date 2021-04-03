@@ -18,7 +18,9 @@ Game::Game() : m_levels(m_image), m_flag_ball_move(false), m_level(0)
     m_image.loadFromFile(IMGPATH);
     
     m_platform = new ConcretePlatform(m_image);
+    assert(m_platform);
     m_collision_manager = new CollisionManager(m_platform, m_balls, m_blocks, m_bonuses, m_bullets);
+    assert(m_collision_manager);
 
     GameObjectInit();   //Game object initialization    
 }

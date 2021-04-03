@@ -1,44 +1,6 @@
-﻿  Platform.cpp
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Config.h(228,37): warning C4305: инициализация: усечение из "double" в "float"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Config.h(229,33): warning C4305: инициализация: усечение из "double" в "float"
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(55,33): warning C4305: =: усечение из "double" в "T"
-          with
-          [
-              T=float
-          ]
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(66,33): warning C4305: =: усечение из "double" в "T"
-          with
-          [
-              T=float
-          ]
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(84,32): warning C4305: =: усечение из "double" в "T"
-          with
-          [
-              T=float
-          ]
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(95,32): warning C4305: =: усечение из "double" в "T"
-          with
-          [
-              T=float
-          ]
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(242,35): warning C4305: +=: усечение из "double" в "T"
-          with
-          [
-              T=float
-          ]
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(249,39): warning C4305: +=: усечение из "double" в "T"
-          with
-          [
-              T=float
-          ]
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(271,35): warning C4305: +=: усечение из "double" в "T"
-          with
-          [
-              T=float
-          ]
-F:\My_project\С++\Arkanoid\Arkanoid_classic\Platform.cpp(278,38): warning C4305: +=: усечение из "double" в "T"
-          with
-          [
-              T=float
-          ]
+﻿  Levels.cpp
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Config.h(229,37): warning C4305: инициализация: усечение из "double" в "float"
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Config.h(230,33): warning C4305: инициализация: усечение из "double" в "float"
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Levels.cpp(167,93): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+F:\My_project\С++\Arkanoid\Arkanoid_classic\Levels.cpp(167,43): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
   Arkanoid_classic.vcxproj -> F:\My_project\С++\Arkanoid\Arkanoid_classic\x64\Debug\Arkanoid_classic.exe

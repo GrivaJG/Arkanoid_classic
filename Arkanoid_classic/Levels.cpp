@@ -8,9 +8,13 @@
 
 void Levels::InitLevel(int lvl, std::vector<Block*>& blocks)
 {
-    std::ifstream file("Config/lvlCreator.ini");
-    if (file.is_open())
-        std::cout << "FILE is open" << std::endl;
+    std::ifstream file(LEVEL_CREATOR_PATH);
+    if (file.fail())
+    {
+        std::cout << "File lvl_creator is not found" << std::endl;
+        system("pause");
+        exit(-1);
+    }
 
     std::ostringstream level;
     level << lvl;

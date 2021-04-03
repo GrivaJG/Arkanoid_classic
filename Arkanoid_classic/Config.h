@@ -20,6 +20,7 @@ using std::string;
 
 const string IMGPATH = "Images/Sprites_Arkanoid.png";
 const string FONTPATH = "Fonts/Neucha/Neucha-Regular.ttf";
+const string LEVEL_CREATOR_PATH = "Config/lvlCreator.ini";
 const string MUSIC_BASE = "MusicAndSounds/Stupid_Dancer.wav";
 const string SOUND_BALL_BOUNCE_OFF_BLOCK = "MusicAndSounds/ballBounceOfBlock.wav";
 const string SOUND_BALL_BOUNCE_OFF_BORDER_MAP = "MusicAndSounds/ballBounceOfBorderMap.wav";
